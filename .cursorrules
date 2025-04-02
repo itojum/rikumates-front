@@ -20,4 +20,14 @@ Vercel and Firebase Integration:
 - Implement Firebase Auth and Row Level Security
 - Utilize Firebase realtime subscriptions
 
-Always consider best practices for security, accessibility, and internationalization.
+Here are the rules for commit messages
+Main text and bullet points of changes.
+Add the following prefixes to the commit messages.
+- feat: A new feature
+- fix: A bug fix
+- docs: Documentation only changes 
+- style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- refactor: A code change that neither fixes a bug nor adds a feature
+- perf: A code change that improves performance
+- test: Adding missing or correcting existing tests
+- chore: Changes to the build process or auxiliary tools and libraries such as documentation generation
