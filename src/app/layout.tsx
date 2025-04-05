@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "りくめいつは、就活体験を向上させるためのサービスです。",
 }
 
-export const RootLayout = ({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -23,3 +23,5 @@ export const RootLayout = ({
     </html>
   )
 }
+
+export default RootLayout
