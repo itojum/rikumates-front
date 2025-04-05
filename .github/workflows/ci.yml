@@ -22,14 +22,17 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Install react-intl
-        run: npm install react-intl --legacy-peer-deps
-
       - name: Run format check
         run: npm run lint:format
 
       - name: Run ESLint
         run: npm run lint
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm run test
 
   deploy:
     needs: test
@@ -47,9 +50,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-
-      - name: Install react-intl
-        run: npm install react-intl --legacy-peer-deps
 
       - name: Build
         run: npm run build
