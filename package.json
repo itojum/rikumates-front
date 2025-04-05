@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "lint:format": "yarn lint && yarn format"
+    "lint:format": "yarn lint && yarn format",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "eslint-config-prettier": "^10.1.1",
