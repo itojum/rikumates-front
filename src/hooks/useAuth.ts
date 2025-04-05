@@ -32,13 +32,13 @@ const setSessionCookie = (idToken: string) => {
 
 // セッションクッキーの削除
 const clearSessionCookie = () => {
-    document.cookie = "__session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    document.cookie = '__session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
 }
 
 // ポップアップウィンドウの設定
 const getPopupConfig = () => ({
-    width: "500",
-    height: "600",
+    width: '500',
+    height: '600',
     left: String(window.screenX + (window.outerWidth - 500) / 2),
     top: String(window.screenY + (window.outerHeight - 600) / 2),
 })
@@ -59,14 +59,14 @@ export const useAuth = (): AuthState => {
                     // ユーザーがログインしている場合、IDトークンを取得してクッキーに保存
                     const idToken = await user.getIdToken(true)
                     setSessionCookie(idToken)
-                    router.push("/dashboard")
+                    router.push('/dashboard')
                 } else {
                     // ユーザーがログアウトしている場合、クッキーを削除
                     clearSessionCookie()
-                    router.push("/login")
+                    router.push('/login')
                 }
             } catch (error) {
-                console.error("認証状態の更新に失敗しました:", error)
+                console.error('認証状態の更新に失敗しました:', error)
                 setLoading(false)
             }
         })
@@ -83,7 +83,7 @@ export const useAuth = (): AuthState => {
             setSessionCookie(idToken)
             return userCredential.user
         } catch (error) {
-            console.error("ログインに失敗しました:", error)
+            console.error('ログインに失敗しました:', error)
             throw error
         }
     }
@@ -94,7 +94,7 @@ export const useAuth = (): AuthState => {
             await setPersistence(auth, browserLocalPersistence)
             const provider = new GoogleAuthProvider()
             provider.setCustomParameters({
-                prompt: "select_account", // 毎回アカウント選択を表示
+                prompt: 'select_account',
                 ...getPopupConfig(),
             })
             const userCredential = await signInWithPopup(auth, provider)
@@ -102,7 +102,7 @@ export const useAuth = (): AuthState => {
             setSessionCookie(idToken)
             return userCredential.user
         } catch (error) {
-            console.error("Googleログインに失敗しました:", error)
+            console.error('Googleログインに失敗しました:', error)
             throw error
         }
     }
@@ -118,7 +118,7 @@ export const useAuth = (): AuthState => {
             setSessionCookie(idToken)
             return userCredential.user
         } catch (error) {
-            console.error("GitHubログインに失敗しました:", error)
+            console.error('GitHubログインに失敗しました:', error)
             throw error
         }
     }
@@ -128,9 +128,9 @@ export const useAuth = (): AuthState => {
         try {
             await firebaseSignOut(auth)
             clearSessionCookie()
-            router.push("/login")
+            router.push('/login')
         } catch (error) {
-            console.error("ログアウトに失敗しました:", error)
+            console.error('ログアウトに失敗しました:', error)
             throw error
         }
     }
