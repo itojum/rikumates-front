@@ -17,6 +17,7 @@
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-intl": "^7.1.10",
     "smarthr-ui": "^66.1.1",
     "styled-components": "^6.1.16"
   },
