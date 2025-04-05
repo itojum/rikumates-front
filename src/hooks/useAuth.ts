@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import {
     User,
-    signInWithEmailAndPassword,
     signOut as firebaseSignOut,
     onAuthStateChanged,
     GoogleAuthProvider,
@@ -19,7 +18,6 @@ import { useRouter } from "next/navigation"
 type AuthState = {
     user: User | null
     loading: boolean
-    signIn: (email: string, password: string) => Promise<User>
     signInWithGoogle: () => Promise<User>
     signInWithGithub: () => Promise<User>
     signOut: () => Promise<void>
@@ -74,27 +72,13 @@ export const useAuth = (): AuthState => {
         return () => unsubscribe()
     }, [router])
 
-    // メールアドレスとパスワードでのログイン
-    const signIn = async (email: string, password: string): Promise<User> => {
-        try {
-            await setPersistence(auth, browserLocalPersistence)
-            const userCredential = await signInWithEmailAndPassword(auth, email, password)
-            const idToken = await userCredential.user.getIdToken(true)
-            setSessionCookie(idToken)
-            return userCredential.user
-        } catch (error) {
-            console.error('ログインに失敗しました:', error)
-            throw error
-        }
-    }
-
     // Googleアカウントでのログイン
     const signInWithGoogle = async (): Promise<User> => {
         try {
             await setPersistence(auth, browserLocalPersistence)
             const provider = new GoogleAuthProvider()
             provider.setCustomParameters({
-                prompt: 'select_account',
+                prompt: 'select_account', // 毎回アカウント選択を表示
                 ...getPopupConfig(),
             })
             const userCredential = await signInWithPopup(auth, provider)
@@ -138,7 +122,6 @@ export const useAuth = (): AuthState => {
     return {
         user,
         loading,
-        signIn,
         signInWithGoogle,
         signInWithGithub,
         signOut,
