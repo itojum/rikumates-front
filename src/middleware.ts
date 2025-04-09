@@ -1,25 +1,19 @@
-import { NextResponse, type NextRequest } from "next/server"
+import { type NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
-export function middleware(request: NextRequest) {
-  const authCookie = request.cookies.get("__session")
-
-  // 認証が必要なパスのパターン
-  const authRequiredPaths = ["/dashboard"]
-  const isAuthRequired = authRequiredPaths.some((path) => request.nextUrl.pathname.startsWith(path))
-
-  // 認証済みユーザーのみアクセス可能なパスに未認証ユーザーがアクセスした場合
-  if (isAuthRequired && !authCookie) {
-    return NextResponse.redirect(new URL("/login", request.url))
-  }
-
-  // 認証済みユーザーがログインページにアクセスした場合
-  if (authCookie && request.nextUrl.pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", request.url))
-  }
-
-  return NextResponse.next()
+export async function middleware(request: NextRequest) {
+  return await updateSession(request)
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }
