@@ -6,7 +6,7 @@ export type ProfileInsert = TablesInsert<'profiles'>
 export type ProfileUpdate = TablesUpdate<'profiles'>
 
 // 列挙型のエイリアス
-export type UserType = Enums<'user_type'>
+export type JobHuntType = Enums<'job_hunt'>
 
 // データベース型のエクスポート
 export type { Database }
@@ -18,7 +18,8 @@ export type WithTimestamp<T> = T & {
 }
 
 // 定数のエクスポート
-export const USER_TYPES = {
+
+export const JOB_HUNT_TYPES = {
   NEW_GRAD: 'new_grad' as const,
   MID_CAREER: 'mid_career' as const,
 } as const 

@@ -12,27 +12,27 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
-          created_at: string | null
+          created_at: string
           id: string
-          job_hunt_type: Database["public"]["Enums"]["user_type"] | null
-          name: string | null
-          updated_at: string | null
+          job_hunt_type: Database["public"]["Enums"]["job_hunt"]
+          name: string
+          updated_at: string
         }
         Insert: {
           avatar_url?: string | null
-          created_at?: string | null
+          created_at: string
           id: string
-          job_hunt_type?: Database["public"]["Enums"]["user_type"] | null
-          name?: string | null
-          updated_at?: string | null
+          job_hunt_type: Database["public"]["Enums"]["job_hunt"]
+          name: string
+          updated_at: string
         }
         Update: {
           avatar_url?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
-          job_hunt_type?: Database["public"]["Enums"]["user_type"] | null
-          name?: string | null
-          updated_at?: string | null
+          job_hunt_type?: Database["public"]["Enums"]["job_hunt"]
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -44,7 +44,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      user_type: "new_grad" | "mid_career"
+      job_hunt: "new_grad" | "mid_career"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -160,7 +160,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      user_type: ["new_grad", "mid_career"],
+      job_hunt: ["new_grad", "mid_career"],
     },
   },
 } as const
