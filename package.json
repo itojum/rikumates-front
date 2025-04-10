@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "lint:format": "yarn lint && yarn format",
     "type-check": "tsc --noEmit",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "echo \"No tests specified\" && exit 0",
+    "supabase:generate": "supabase gen types typescript --project-id \"jxtubtwntjhosdewdxgb\" --schema public > src/types/supabase.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
@@ -29,9 +30,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "better-supabase-types": "^2.7.6",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^9.1.0",
+    "supabase": "^2.20.12",
     "typescript": "^5"
   }
 }
