@@ -1,0 +1,44 @@
+---
+description: りくめいつサービスの概要
+globs: 
+alwaysApply: false
+---
+# りくめいつ - サービス概要
+
+## サービスの目的
+就職活動の進捗・選考状況・予定などをWeb上で効率的に一元管理するためのサービスです。
+
+## 主要機能
+- 企業情報の管理
+- 選考情報の管理
+- 進捗状況の追跡
+- 予定の管理
+
+## ターゲットユーザー
+- 就職活動中の学生
+- 転職活動中の社会人
+
+## 技術スタック
+- フロントエンド: Next.js (App Router, TypeScript)
+- UI: SmartHR UI
+- 認証: Supabase Authentication
+- データベース: Supabase (PostgreSQL)
+- デプロイ: Vercel
+
+## ディレクトリ構造
+```
+/app
+  ├── (auth)/                  # 認証ルート
+  ├── (dashboard)/             # ダッシュボード
+  ├── companies/               # 企業情報
+  ├── applications/            # 選考情報
+  ├── api/                     # API Routes
+  └── layout.tsx / page.tsx    # ルートレイアウト
+
+/src
+  ├── components/              # UIコンポーネント
+  ├── hooks/                   # カスタムフック
+  ├── lib/                     # ユーティリティ
+  ├── context/                 # React Context
+  └── types/                   # 型定義
+``` 

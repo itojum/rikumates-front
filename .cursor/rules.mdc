@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 至上命令
+- プロンプトを実行する際に関連する./cursor/*/*.mdcのファイルを参照してください
+- 
