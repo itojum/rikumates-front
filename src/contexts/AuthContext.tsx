@@ -39,13 +39,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading) {
-      const isProtectedPath = !pathname?.startsWith('/login') && 
-                            !pathname?.startsWith('/auth') && 
-                            pathname !== '/' &&
-                            pathname !== '/error'
+      const isPublicPath = pathname?.startsWith('/login') || 
+                          pathname?.startsWith('/auth') || 
+                          pathname === '/' ||
+                          pathname === '/error'
       
-      if (isProtectedPath && !user) {
+      // 未ログイン時に保護されたパスにアクセスした場合
+      if (!isPublicPath && !user) {
         router.push('/login')
+      }
+      
+      // ログイン済み時にログインページにアクセスした場合
+      if (isPublicPath && user && pathname !== '/') {
+        router.push('/dashboard')
       }
     }
   }, [user, loading, pathname, router])
