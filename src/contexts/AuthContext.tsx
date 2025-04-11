@@ -28,7 +28,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
       setLoading(false)
     })
 
@@ -39,10 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading) {
-      const isPublicPath = pathname?.startsWith('/login') || 
-                          pathname?.startsWith('/auth') || 
-                          pathname === '/' ||
-                          pathname === '/error'
+      const publicPaths = ['/login', '/auth', '/', '/error']
+      const isPublicPath = publicPaths.some(path => 
+        pathname?.startsWith(path) || pathname === path
+      )
       
       // 未ログイン時に保護されたパスにアクセスした場合
       if (!isPublicPath && !user) {
