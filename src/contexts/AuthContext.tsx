@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { User } from "@supabase/supabase-js"
 
 interface AuthContextType {
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
+  const pathname = usePathname()
 
   useEffect(() => {
     const {
@@ -35,6 +36,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       subscription.unsubscribe()
     }
   }, [supabase])
+
+  useEffect(() => {
+    if (!loading) {
+      const isProtectedPath = !pathname?.startsWith('/login') && 
+                            !pathname?.startsWith('/auth') && 
+                            pathname !== '/' &&
+                            pathname !== '/error'
+      
+      if (isProtectedPath && !user) {
+        router.push('/login')
+      }
+    }
+  }, [user, loading, pathname, router])
 
   const signOut = async () => {
     await supabase.auth.signOut()
