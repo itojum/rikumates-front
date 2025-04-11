@@ -1,18 +1,9 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/contexts/AuthContext"
 
 export default function DashboardPage() {
   const { user, loading, signOut } = useAuthContext()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login")
-    }
-  }, [user, loading, router])
 
   if (loading) {
     return <div>Loading...</div>
