@@ -2,6 +2,51 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyUpdate } from "@/types/database"
 
+
+/**
+ * 企業情報を取得するエンドポイント
+ * @param request - リクエストオブジェクト
+ * @param params - パスパラメータ
+ */
+export async function GET(
+  request: Request,
+  { params }: { params: { company_id: string } }
+) {
+  const companyId = parseInt(params.company_id)
+
+  // バリデーションチェック
+  if (!companyId) {
+    return NextResponse.json({ error: "company_id is required" }, { status: 400 })
+  }
+
+  // Supabaseクライアントの初期化
+  const supabase = await createClient()
+
+  // ログインユーザーの取得
+  const { data: user, error: userError } = await supabase.auth.getUser()
+  if (userError) {
+    return NextResponse.json({ error: userError.message }, { status: 500 })
+  }
+
+  // 企業情報の取得
+  const { data: company, error: companyError } = await supabase
+    .from("companies")
+    .select("*")
+    .eq("id", companyId)
+    .eq("user_id", user.user?.id)
+    .single()
+
+  if (companyError) {
+    return NextResponse.json({ error: companyError.message }, { status: 500 })
+  }
+
+  if (!company) {
+    return NextResponse.json({ error: "Company not found or unauthorized" }, { status: 404 })
+  }
+
+  return NextResponse.json({ data: company }, { status: 200 })
+}
+
 /**
  * 企業情報を更新するエンドポイント
  * @param request - リクエストオブジェクト

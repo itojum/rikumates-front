@@ -1,5 +1,5 @@
 import { GET, POST } from "@/app/api/v1/companies/route"
-import { PUT, DELETE } from "@/app/api/v1/companies/[company_id]/route"
+import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[company_id]/route"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/json"
 
@@ -656,6 +656,212 @@ describe("Companies API", () => {
 
       expect(response.status).toBe(500)
       expect(data.error).toBe("Database error")
+    })
+  })
+
+  describe("GET /api/v1/companies/[company_id]", () => {
+    it("should return a company successfully", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      const mockCompany = {
+        id: 1,
+        name: "Test Company",
+        industry: "IT",
+        website_url: "https://example.com",
+        user_id: "test-user-id",
+        created_at: "2024-03-20T12:00:00.000Z",
+        updated_at: "2024-03-20T12:00:00.000Z",
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                single: jest.fn().mockResolvedValue({ data: mockCompany, error: null }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.data).toEqual(mockCompany)
+    })
+
+    it("should return error when company_id is invalid", async () => {
+      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "invalid" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("company_id is required")
+    })
+
+    it("should return error when user authentication fails", async () => {
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
+        },
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Authentication failed")
+    })
+
+    it("should return error when company not found", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                single: jest.fn().mockResolvedValue({ data: null, error: null }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies/999", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "999" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(404)
+      expect(data.error).toBe("Company not found or unauthorized")
+    })
+
+    it("should return error when database query fails", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                single: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Database error")
+    })
+
+    it("should return company with correct data structure", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      const mockCompany = {
+        id: 1,
+        name: "Test Company",
+        industry: "IT",
+        website_url: "https://example.com",
+        user_id: "test-user-id",
+        created_at: "2024-03-20T12:00:00.000Z",
+        updated_at: "2024-03-20T12:00:00.000Z",
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                single: jest.fn().mockResolvedValue({ data: mockCompany, error: null }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "GET",
+      })
+
+      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.data).toHaveProperty("id")
+      expect(typeof data.data.id).toBe("number")
+
+      expect(data.data).toHaveProperty("name")
+      expect(typeof data.data.name).toBe("string")
+      expect(data.data.name.length).toBeGreaterThan(0)
+
+      expect(data.data).toHaveProperty("industry")
+      expect(typeof data.data.industry).toBe("string")
+
+      expect(data.data).toHaveProperty("website_url")
+      expect(typeof data.data.website_url).toBe("string")
+      expect(data.data.website_url).toMatch(/^https?:\/\/.+/)
+
+      expect(data.data).toHaveProperty("user_id")
+      expect(typeof data.data.user_id).toBe("string")
+      expect(data.data.user_id).toBe("test-user-id")
+
+      expect(data.data).toHaveProperty("created_at")
+      expect(new Date(data.data.created_at).toString()).not.toBe("Invalid Date")
+
+      expect(data.data).toHaveProperty("updated_at")
+      expect(new Date(data.data.updated_at).toString()).not.toBe("Invalid Date")
     })
   })
 })
