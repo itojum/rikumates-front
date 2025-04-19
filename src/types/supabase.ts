@@ -9,12 +9,50 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      companies: {
+        Row: {
+          created_at: string
+          id: string
+          industry: string | null
+          name: string | null
+          updated_at: string
+          user_id: string | null
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          name?: string | null
+          updated_at: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          industry?: string | null
+          name?: string | null
+          updated_at?: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string
           id: string
-          job_hunt_type: Database["public"]["Enums"]["job_hunt"]
+          job_hunt_type: Database["public"]["Enums"]["job_hunt"] | null
           name: string
           updated_at: string
         }
@@ -22,7 +60,7 @@ export type Database = {
           avatar_url?: string | null
           created_at: string
           id: string
-          job_hunt_type: Database["public"]["Enums"]["job_hunt"]
+          job_hunt_type?: Database["public"]["Enums"]["job_hunt"] | null
           name: string
           updated_at: string
         }
@@ -30,7 +68,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           id?: string
-          job_hunt_type?: Database["public"]["Enums"]["job_hunt"]
+          job_hunt_type?: Database["public"]["Enums"]["job_hunt"] | null
           name?: string
           updated_at?: string
         }
