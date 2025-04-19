@@ -1,4 +1,4 @@
-import { GET, POST } from '@/app/api/v1/companies/route';
+import { GET, POST, PUT } from '@/app/api/v1/companies/route';
 import { createClient } from '@/lib/supabase/server';
 import { Json } from '@/types/json';
 
@@ -207,6 +207,200 @@ describe('Companies API', () => {
       });
 
       const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(500);
+      expect(data.error).toBe('Database error');
+    });
+  });
+
+  describe('PUT /api/v1/companies', () => {
+    it('should update a company successfully', async () => {
+      const mockUser = {
+        user: {
+          id: 'test-user-id',
+        },
+      };
+
+      const mockUpdatedCompany = {
+        id: 1,
+        name: 'Updated Company',
+        industry: 'Updated Industry',
+        website_url: 'https://updated.com',
+        user_id: 'test-user-id',
+      };
+
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          update: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({ data: [mockUpdatedCompany], error: null }),
+              }),
+            }),
+          }),
+        }),
+      });
+
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 1,
+          name: 'Updated Company',
+          industry: 'Updated Industry',
+          website_url: 'https://updated.com',
+        }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.data).toEqual(mockUpdatedCompany);
+    });
+
+    it('should return error when id is missing', async () => {
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: 'Updated Company',
+        }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('id is required');
+    });
+
+    it('should return error when name is empty', async () => {
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 1,
+          name: '',
+        }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('name cannot be empty');
+    });
+
+    it('should return error when user authentication fails', async () => {
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: 'Authentication failed' } }),
+        },
+      });
+
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 1,
+          name: 'Updated Company',
+        }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(500);
+      expect(data.error).toBe('Authentication failed');
+    });
+
+    it('should return error when company not found', async () => {
+      const mockUser = {
+        user: {
+          id: 'test-user-id',
+        },
+      };
+
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          update: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({ data: [], error: null }),
+              }),
+            }),
+          }),
+        }),
+      });
+
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 999,
+          name: 'Updated Company',
+        }),
+      });
+
+      const response = await PUT(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(404);
+      expect(data.error).toBe('Company not found or unauthorized');
+    });
+
+    it('should return error when database update fails', async () => {
+      const mockUser = {
+        user: {
+          id: 'test-user-id',
+        },
+      };
+
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          update: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({ data: null, error: { message: 'Database error' } }),
+              }),
+            }),
+          }),
+        }),
+      });
+
+      const request = new Request('http://localhost:3000/api/v1/companies', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: 1,
+          name: 'Updated Company',
+        }),
+      });
+
+      const response = await PUT(request);
       const data = await response.json();
 
       expect(response.status).toBe(500);
