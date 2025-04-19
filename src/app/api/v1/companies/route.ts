@@ -17,6 +17,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const { name, industry, website_url } = await request.json();
+  if(name.length === 0) {
+    return NextResponse.json({ error: 'name is required' }, { status: 400 });
+  }
+  
   const supabase = await createClient();
 
   const { data: user, error: userError } = await supabase.auth.getUser();
