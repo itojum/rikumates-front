@@ -1,7 +1,7 @@
 type PostCompanyProps = {
   name: string;
-  industry: string;
-  website_url: string;
+  industry?: string;
+  website_url?: string;
 } 
 
 export const usePostCompany = () => {
