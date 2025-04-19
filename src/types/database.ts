@@ -5,6 +5,10 @@ export type Profile = Tables<'profiles'>
 export type ProfileInsert = TablesInsert<'profiles'>
 export type ProfileUpdate = TablesUpdate<'profiles'>
 
+export type Company = Tables<'companies'>
+export type CompanyInsert = TablesInsert<'companies'>
+export type CompanyUpdate = TablesUpdate<'companies'>
+
 // 列挙型のエイリアス
 export type JobHuntType = Enums<'job_hunt'>
 
@@ -18,7 +22,6 @@ export type WithTimestamp<T> = T & {
 }
 
 // 定数のエクスポート
-
 export const JOB_HUNT_TYPES = {
   NEW_GRAD: 'new_grad' as const,
   MID_CAREER: 'mid_career' as const,
