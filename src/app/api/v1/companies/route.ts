@@ -115,3 +115,44 @@ export async function PUT(request: Request) {
 
   return NextResponse.json({ data: updateResult[0] }, { status: 200 })
 }
+
+/**
+ * 企業情報を削除するエンドポイント
+ * @param request - リクエストオブジェクト
+ */
+export async function DELETE(request: Request) {
+  // リクエストボディからデータを取得
+  const { id } = await request.json()
+
+  // バリデーションチェック
+  if (!id) {
+    return NextResponse.json({ error: "id is required" }, { status: 400 })
+  }
+
+  // Supabaseクライアントの初期化
+  const supabase = await createClient()
+
+  // ログインユーザーの取得
+  const { data: user, error: userError } = await supabase.auth.getUser()
+  if (userError) {
+    return NextResponse.json({ error: userError.message }, { status: 500 })
+  }
+
+  // データベースからの削除
+  const { data: deleteResult, error: deleteError } = await supabase
+    .from("companies")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.user?.id)
+    .select()
+
+  if (deleteError) {
+    return NextResponse.json({ error: deleteError.message }, { status: 500 })
+  }
+
+  if (!deleteResult || deleteResult.length === 0) {
+    return NextResponse.json({ error: "Company not found or unauthorized" }, { status: 404 })
+  }
+
+  return NextResponse.json({ message: "Company deleted successfully" }, { status: 200 })
+}

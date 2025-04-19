@@ -1,4 +1,4 @@
-import { GET, POST, PUT } from "@/app/api/v1/companies/route"
+import { GET, POST, PUT, DELETE } from "@/app/api/v1/companies/route"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/json"
 
@@ -514,6 +514,176 @@ describe("Companies API", () => {
       })
 
       const response = await PUT(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Database error")
+    })
+  })
+
+  describe("DELETE /api/v1/companies", () => {
+    it("should delete a company successfully", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          delete: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({
+                  data: [
+                    {
+                      id: 1,
+                      name: "Company to Delete",
+                      industry: "IT",
+                      website_url: "https://example.com",
+                      user_id: "test-user-id",
+                    },
+                  ],
+                  error: null,
+                }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 1,
+        }),
+      })
+
+      const response = await DELETE(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.message).toBe("Company deleted successfully")
+    })
+
+    it("should return error when id is missing", async () => {
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+
+      const response = await DELETE(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("id is required")
+    })
+
+    it("should return error when user authentication fails", async () => {
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
+        },
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 1,
+        }),
+      })
+
+      const response = await DELETE(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Authentication failed")
+    })
+
+    it("should return error when company not found", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          delete: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({ data: [], error: null }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 999,
+        }),
+      })
+
+      const response = await DELETE(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(404)
+      expect(data.error).toBe("Company not found or unauthorized")
+    })
+
+    it("should return error when database delete fails", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          delete: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({
+                select: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
+              }),
+            }),
+          }),
+        }),
+      })
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: 1,
+        }),
+      })
+
+      const response = await DELETE(request)
       const data = await response.json()
 
       expect(response.status).toBe(500)
