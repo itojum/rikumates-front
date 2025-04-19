@@ -1,11 +1,11 @@
 "use client"
 
-import { Button } from "smarthr-ui";
-import { signInWithGitHub } from "@/lib/supabase/authGitHub";
+import { Button } from "smarthr-ui"
+import { signInWithGitHub } from "@/lib/supabase/authGitHub"
 
 export default function GitHubLoginButton() {
   const handleGitHubLogin = async () => {
-    await signInWithGitHub();
+    await signInWithGitHub()
   }
   return <Button onClick={handleGitHubLogin}>GitHubでログイン</Button>
 }

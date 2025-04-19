@@ -60,19 +60,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!loading) {
       // 認証が不要なパスの定義
-      const publicPaths = ['/login', '/auth', '/', '/error']
-      const isPublicPath = publicPaths.some(path => 
-        pathname?.startsWith(path) || pathname === path
-      )
-      
+      const publicPaths = ["/login", "/auth", "/", "/error"]
+      const isPublicPath = publicPaths.some((path) => pathname?.startsWith(path) || pathname === path)
+
       // 未ログイン時に保護されたパスにアクセスした場合、ログインページにリダイレクト
       if (!isPublicPath && !user) {
-        router.push('/login')
+        router.push("/login")
       }
-      
+
       // ログイン済み時にログインページにアクセスした場合、ダッシュボードにリダイレクト
-      if (isPublicPath && user && pathname !== '/') {
-        router.push('/dashboard')
+      if (isPublicPath && user && pathname !== "/") {
+        router.push("/dashboard")
       }
     }
   }, [user, loading, pathname, router])
@@ -86,14 +84,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push("/login")
   }
 
-  return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ user, loading, signOut }}>{children}</AuthContext.Provider>
 }
 
 /**
  * 認証コンテキストを使用するためのカスタムフック
  */
-export const useAuthContext = () => useContext(AuthContext) 
+export const useAuthContext = () => useContext(AuthContext)
