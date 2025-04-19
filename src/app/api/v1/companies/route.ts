@@ -59,6 +59,9 @@ export async function POST(request: Request) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+  if(!data) {
+    return NextResponse.json({ error: 'Failed to insert company' }, { status: 500 });
+  }
   return NextResponse.json({ data }, { status: 200 });
 }
 

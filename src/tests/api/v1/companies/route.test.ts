@@ -2,6 +2,16 @@ import { GET, POST, PUT } from '@/app/api/v1/companies/route';
 import { createClient } from '@/lib/supabase/server';
 import { Json } from '@/types/json';
 
+interface Company {
+  id: number;
+  name: string;
+  industry: string;
+  website_url: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
 // NextResponseのモック
 jest.mock('next/server', () => ({
   NextResponse: {
@@ -101,6 +111,109 @@ describe('Companies API', () => {
 
       expect(response.status).toBe(500);
       expect(data.error).toBe('Database error');
+    });
+
+    it('should return companies with correct data structure', async () => {
+      const mockUser = {
+        user: {
+          id: 'test-user-id',
+        },
+      };
+
+      const mockCompanies = [
+        {
+          id: 1,
+          name: 'Company 1',
+          industry: 'IT',
+          website_url: 'https://example1.com',
+          user_id: 'test-user-id',
+          created_at: '2024-03-20T12:00:00.000Z',
+          updated_at: '2024-03-20T12:00:00.000Z'
+        },
+        {
+          id: 2,
+          name: 'Company 2',
+          industry: 'Finance',
+          website_url: 'https://example2.com',
+          user_id: 'test-user-id',
+          created_at: '2024-03-20T13:00:00.000Z',
+          updated_at: '2024-03-20T13:00:00.000Z'
+        }
+      ];
+
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockResolvedValue({ data: mockCompanies, error: null }),
+          }),
+        }),
+      });
+
+      const response = await GET();
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(data.data)).toBe(true);
+      expect(data.data.length).toBe(2);
+
+      // 各企業データの構造を検証
+      data.data.forEach((company: Company) => {
+        expect(company).toHaveProperty('id');
+        expect(typeof company.id).toBe('number');
+        
+        expect(company).toHaveProperty('name');
+        expect(typeof company.name).toBe('string');
+        expect(company.name.length).toBeGreaterThan(0);
+        
+        expect(company).toHaveProperty('industry');
+        expect(typeof company.industry).toBe('string');
+        
+        expect(company).toHaveProperty('website_url');
+        expect(typeof company.website_url).toBe('string');
+        expect(company.website_url).toMatch(/^https?:\/\/.+/);
+        
+        expect(company).toHaveProperty('user_id');
+        expect(typeof company.user_id).toBe('string');
+        expect(company.user_id).toBe('test-user-id');
+        
+        expect(company).toHaveProperty('created_at');
+        expect(new Date(company.created_at).toString()).not.toBe('Invalid Date');
+        
+        expect(company).toHaveProperty('updated_at');
+        expect(new Date(company.updated_at).toString()).not.toBe('Invalid Date');
+      });
+
+      // データの順序を検証（IDの昇順）
+      expect(data.data[0].id).toBeLessThan(data.data[1].id);
+    });
+
+    it('should return empty array when user has no companies', async () => {
+      const mockUser = {
+        user: {
+          id: 'test-user-id',
+        },
+      };
+
+      (createClient as jest.Mock).mockReturnValue({
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockResolvedValue({ data: [], error: null }),
+          }),
+        }),
+      });
+
+      const response = await GET();
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(data.data)).toBe(true);
+      expect(data.data.length).toBe(0);
     });
   });
 
