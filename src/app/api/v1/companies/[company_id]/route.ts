@@ -2,16 +2,12 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyUpdate } from "@/types/database"
 
-
 /**
  * 企業情報を取得するエンドポイント
  * @param request - リクエストオブジェクト
  * @param params - パスパラメータ
  */
-export async function GET(
-  request: Request,
-  { params }: { params: { company_id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { company_id: string } }) {
   const companyId = parseInt(params.company_id)
 
   // バリデーションチェック
@@ -52,10 +48,7 @@ export async function GET(
  * @param request - リクエストオブジェクト
  * @param params - パスパラメータ
  */
-export async function PUT(
-  request: Request,
-  { params }: { params: { company_id: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { company_id: string } }) {
   // リクエストボディからデータを取得
   const { name, industry, website_url } = await request.json()
   const companyId = parseInt(params.company_id)
@@ -108,10 +101,7 @@ export async function PUT(
  * @param request - リクエストオブジェクト
  * @param params - パスパラメータ
  */
-export async function DELETE(
-  request: Request,
-  { params }: { params: { company_id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { company_id: string } }) {
   const companyId = parseInt(params.company_id)
 
   // バリデーションチェック
