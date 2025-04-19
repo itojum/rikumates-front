@@ -1,6 +1,6 @@
 export const useDeleteCompany = () => {
-  const deleteCompany = async (id: string) => {
-    const response = await fetch(`/api/v1/companies/${id}`, {
+  const deleteCompany = async (companyId: string) => {
+    const response = await fetch(`/api/v1/companies/${companyId}`, {
       method: 'DELETE',
     });
 

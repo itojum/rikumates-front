@@ -1,4 +1,5 @@
-import { GET, POST, PUT, DELETE } from "@/app/api/v1/companies/route"
+import { GET, POST } from "@/app/api/v1/companies/route"
+import { PUT, DELETE } from "@/app/api/v1/companies/[company_id]/route"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/json"
 
@@ -327,7 +328,7 @@ describe("Companies API", () => {
     })
   })
 
-  describe("PUT /api/v1/companies", () => {
+  describe("PUT /api/v1/companies/[company_id]", () => {
     it("should update a company successfully", async () => {
       const mockUser = {
         user: {
@@ -358,28 +359,27 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 1,
           name: "Updated Company",
           industry: "Updated Industry",
           website_url: "https://updated.com",
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(200)
       expect(data.data).toEqual(mockUpdatedCompany)
     })
 
-    it("should return error when id is missing", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+    it("should return error when company_id is invalid", async () => {
+      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -389,26 +389,25 @@ describe("Companies API", () => {
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "invalid" } })
       const data = await response.json()
 
       expect(response.status).toBe(400)
-      expect(data.error).toBe("id is required")
+      expect(data.error).toBe("company_id is required")
     })
 
     it("should return error when name is empty", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 1,
           name: "",
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -422,18 +421,17 @@ describe("Companies API", () => {
         },
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 1,
           name: "Updated Company",
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -462,18 +460,17 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/999", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 999,
           name: "Updated Company",
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "999" } })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -502,18 +499,17 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: 1,
           name: "Updated Company",
         }),
       })
 
-      const response = await PUT(request)
+      const response = await PUT(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -521,7 +517,7 @@ describe("Companies API", () => {
     })
   })
 
-  describe("DELETE /api/v1/companies", () => {
+  describe("DELETE /api/v1/companies/[company_id]", () => {
     it("should delete a company successfully", async () => {
       const mockUser = {
         user: {
@@ -555,37 +551,27 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: 1,
-        }),
       })
 
-      const response = await DELETE(request)
+      const response = await DELETE(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(200)
       expect(data.message).toBe("Company deleted successfully")
     })
 
-    it("should return error when id is missing", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+    it("should return error when company_id is invalid", async () => {
+      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
       })
 
-      const response = await DELETE(request)
+      const response = await DELETE(request, { params: { company_id: "invalid" } })
       const data = await response.json()
 
       expect(response.status).toBe(400)
-      expect(data.error).toBe("id is required")
+      expect(data.error).toBe("company_id is required")
     })
 
     it("should return error when user authentication fails", async () => {
@@ -595,17 +581,11 @@ describe("Companies API", () => {
         },
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: 1,
-        }),
       })
 
-      const response = await DELETE(request)
+      const response = await DELETE(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -634,17 +614,11 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/999", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: 999,
-        }),
       })
 
-      const response = await DELETE(request)
+      const response = await DELETE(request, { params: { company_id: "999" } })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -673,17 +647,11 @@ describe("Companies API", () => {
         }),
       })
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: 1,
-        }),
       })
 
-      const response = await DELETE(request)
+      const response = await DELETE(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(500)
