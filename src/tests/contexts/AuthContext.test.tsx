@@ -1,5 +1,5 @@
 import { render, screen as rtlScreen, act } from "@testing-library/react"
-import { AuthProvider, useAuthContext } from "../AuthContext"
+import { AuthProvider, useAuthContext } from "@/contexts/AuthContext"
 import { createClient } from "@/lib/supabase/client"
 import { User } from "@supabase/supabase-js"
 
