@@ -40,6 +40,17 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
+    if (name.length > 255) {
+      return NextResponse.json(
+        { error: "name must be less than 255 characters" },
+        { status: 400 }
+      )
+    }else if(name.length < 1){
+      return NextResponse.json(
+        { error: "name is too short" },
+        { status: 400 }
+      )
+    }
 
     // Supabaseクライアントの初期化
     const supabase = await createClient()
