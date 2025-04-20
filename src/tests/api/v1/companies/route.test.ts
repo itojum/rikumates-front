@@ -1,5 +1,5 @@
 import { GET, POST } from "@/app/api/v1/companies/route"
-import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[company_id]/route"
+import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[id]/route"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
 
