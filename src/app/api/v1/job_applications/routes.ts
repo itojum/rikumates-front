@@ -13,17 +13,15 @@ export async function GET(request: Request) {
   }
 
   if (!company_id) {
-    const { data, error } = await supabase.from("job_applications")
-      .select("*")
-      .eq("user_id", user.user?.id)
+    const { data, error } = await supabase.from("job_applications").select("*").eq("user_id", user.user?.id)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
     return NextResponse.json(data)
-
   } else {
-    const { data, error } = await supabase.from("job_applications")
+    const { data, error } = await supabase
+      .from("job_applications")
       .select("*")
       .eq("user_id", user.user?.id)
       .eq("company_id", company_id)
@@ -32,7 +30,6 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
     return NextResponse.json(data)
-
   }
 }
 

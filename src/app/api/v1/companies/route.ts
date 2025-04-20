@@ -35,21 +35,12 @@ export async function POST(request: Request) {
 
     // バリデーションチェック
     if (!name) {
-      return NextResponse.json(
-        { error: "name is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "name is required" }, { status: 400 })
     }
     if (name.length > 255) {
-      return NextResponse.json(
-        { error: "name must be less than 255 characters" },
-        { status: 400 }
-      )
-    }else if(name.length < 1){
-      return NextResponse.json(
-        { error: "name is too short" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "name must be less than 255 characters" }, { status: 400 })
+    } else if (name.length < 1) {
+      return NextResponse.json({ error: "name is too short" }, { status: 400 })
     }
 
     // Supabaseクライアントの初期化
@@ -80,9 +71,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ data }, { status: 200 })
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Invalid request body"
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: errorMessage }, { status: 400 })
   }
 }

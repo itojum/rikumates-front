@@ -4,12 +4,12 @@ import { createClient } from "@/lib/supabase/server"
 
 /**
  * 応募情報APIのテストファイル
- * 
+ *
  * このファイルでは、以下のAPIエンドポイントのテストを行います：
  * - GET /api/v1/job_applications/[job_application_id] - 特定の応募情報の取得
  * - PUT /api/v1/job_applications/[job_application_id] - 応募情報の更新
  * - DELETE /api/v1/job_applications/[job_application_id] - 応募情報の削除
- * 
+ *
  * 各エンドポイントに対して、以下のケースをテストします：
  * - 正常系：認証済みユーザーによる操作
  * - 異常系：存在しないデータへのアクセス（404エラー）
@@ -301,4 +301,4 @@ describe("DELETE /api/v1/job_applications/[job_application_id]", () => {
     expect(response.status).toBe(500)
     expect(data.error).toBe("認証エラー")
   })
-}) 
+})

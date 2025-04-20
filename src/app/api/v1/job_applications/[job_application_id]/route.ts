@@ -14,8 +14,12 @@ export async function GET(request: Request, { params }: { params: { job_applicat
   if (userError) {
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
-  const { data, error } = await supabase.from("job_applications")
-      .select("*").eq("id", job_application_id).eq("user_id", user.user?.id).single()
+  const { data, error } = await supabase
+    .from("job_applications")
+    .select("*")
+    .eq("id", job_application_id)
+    .eq("user_id", user.user?.id)
+    .single()
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -39,8 +43,12 @@ export async function PUT(request: Request, { params }: { params: { job_applicat
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
   // 更新対象の応募情報が存在し、かつユーザーが所有者であることを確認
-  const { data: existingData } = await supabase.from("job_applications")
-    .select("*").eq("id", job_application_id).eq("user_id", user.user?.id).single()
+  const { data: existingData } = await supabase
+    .from("job_applications")
+    .select("*")
+    .eq("id", job_application_id)
+    .eq("user_id", user.user?.id)
+    .single()
   if (!existingData) {
     return NextResponse.json({ error: "Company not found or unauthorized" }, { status: 404 })
   }
@@ -72,12 +80,17 @@ export async function DELETE(request: Request, { params }: { params: { job_appli
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
   // 削除対象の応募情報が存在し、かつユーザーが所有者であることを確認
-  const { data: existingData } = await supabase.from("job_applications")
-    .select("*").eq("id", job_application_id).eq("user_id", user.user?.id).single()
+  const { data: existingData } = await supabase
+    .from("job_applications")
+    .select("*")
+    .eq("id", job_application_id)
+    .eq("user_id", user.user?.id)
+    .single()
   if (!existingData) {
     return NextResponse.json({ error: "Company not found or unauthorized" }, { status: 404 })
   }
-  const { data, error } = await supabase.from("job_applications")
+  const { data, error } = await supabase
+    .from("job_applications")
     .delete()
     .eq("id", job_application_id)
     .eq("user_id", user.user?.id)
