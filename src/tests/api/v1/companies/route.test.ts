@@ -3,7 +3,6 @@ import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[company
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
 
-
 interface Company {
   id: number
   name: string
