@@ -1,4 +1,4 @@
-import type { Database, Tables, TablesInsert, TablesUpdate, Enums } from "./supabase"
+import type { Database as SupabaseDatabase, Tables, TablesInsert, TablesUpdate, Enums, Json } from "./supabase"
 
 // テーブル型のエイリアス
 export type Profile = Tables<"profiles">
@@ -9,11 +9,16 @@ export type Company = Tables<"companies">
 export type CompanyInsert = TablesInsert<"companies">
 export type CompanyUpdate = TablesUpdate<"companies">
 
+export type JobApplication = Tables<'job_applications'>
+export type JobApplicationInsert = TablesInsert<'job_applications'>
+export type JobApplicationUpdate = TablesUpdate<'job_applications'>
+
 // 列挙型のエイリアス
 export type JobHuntType = Enums<"job_hunt">
 
 // データベース型のエクスポート
-export type { Database }
+export type Database = SupabaseDatabase
+export type { Json }
 
 // ユーティリティ型
 export type WithTimestamp<T> = T & {
