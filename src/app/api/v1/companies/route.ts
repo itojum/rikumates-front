@@ -29,38 +29,49 @@ export async function GET() {
  * @param request - リクエストオブジェクト
  */
 export async function POST(request: Request) {
-  // リクエストボディからデータを取得
-  const { name, industry, website_url } = await request.json()
+  try {
+    // リクエストボディからデータを取得
+    const { name, industry, website_url } = await request.json()
 
-  // バリデーションチェック
-  if (name.length === 0) {
-    return NextResponse.json({ error: "name is required" }, { status: 400 })
-  }
+    // バリデーションチェック
+    if (!name) {
+      return NextResponse.json(
+        { error: "name is required" },
+        { status: 400 }
+      )
+    }
 
-  // Supabaseクライアントの初期化
-  const supabase = await createClient()
+    // Supabaseクライアントの初期化
+    const supabase = await createClient()
 
-  // ログインユーザーの取得
-  const { data: user, error: userError } = await supabase.auth.getUser()
-  if (userError) {
-    return NextResponse.json({ error: userError.message }, { status: 500 })
-  }
+    // ログインユーザーの取得
+    const { data: user, error: userError } = await supabase.auth.getUser()
+    if (userError) {
+      return NextResponse.json({ error: userError.message }, { status: 500 })
+    }
 
-  // 登録データの準備
-  const insertData: CompanyInsert = {
-    user_id: user.user?.id,
-    name,
-    industry,
-    website_url,
-  }
+    // 登録データの準備
+    const insertData: CompanyInsert = {
+      user_id: user.user?.id,
+      name,
+      industry,
+      website_url,
+    }
 
-  // データベースへの登録
-  const { data, error } = await supabase.from("companies").insert(insertData)
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    // データベースへの登録
+    const { data, error } = await supabase.from("companies").insert(insertData)
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+    if (!data) {
+      return NextResponse.json({ error: "Failed to insert company" }, { status: 500 })
+    }
+    return NextResponse.json({ data }, { status: 200 })
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Invalid request body"
+    return NextResponse.json(
+      { error: errorMessage },
+      { status: 400 }
+    )
   }
-  if (!data) {
-    return NextResponse.json({ error: "Failed to insert company" }, { status: 500 })
-  }
-  return NextResponse.json({ data }, { status: 200 })
 }

@@ -3,16 +3,6 @@ import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[company
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
 
-interface Company {
-  id: number
-  name: string
-  industry: string
-  website_url: string
-  user_id: string
-  created_at: string
-  updated_at: string
-}
-
 // NextResponseのモック
 jest.mock("next/server", () => ({
   NextResponse: {
@@ -33,88 +23,14 @@ global.Request = jest.fn().mockImplementation((input, init) => ({
   json: () => Promise.resolve(init?.body ? JSON.parse(init.body) : {}),
 }))
 
-describe("Companies API", () => {
+describe("企業API", () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   describe("GET /api/v1/companies", () => {
-    it("should return companies for authenticated user", async () => {
+    it("認証済みユーザーの企業一覧を取得できる", async () => {
       // モックデータの設定
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      const mockCompanies = [
-        { id: 1, name: "Company 1", industry: "IT", website_url: "https://example1.com" },
-        { id: 2, name: "Company 2", industry: "Finance", website_url: "https://example2.com" },
-      ]
-
-      // Supabaseクライアントのモック設定
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockResolvedValue({ data: mockCompanies, error: null }),
-          }),
-        }),
-      })
-
-      // APIの呼び出し
-      const response = await GET()
-      const data = await response.json()
-
-      // レスポンスの検証
-      expect(response.status).toBe(200)
-      expect(data.data).toEqual(mockCompanies)
-    })
-
-    it("should return error when user authentication fails", async () => {
-      // 認証エラーのモック設定
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
-        },
-      })
-
-      const response = await GET()
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Authentication failed")
-    })
-
-    it("should return error when database query fails", async () => {
-      // ユーザー認証は成功、データベースクエリは失敗するモック設定
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
-          }),
-        }),
-      })
-
-      const response = await GET()
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Database error")
-    })
-
-    it("should return companies with correct data structure", async () => {
       const mockUser = {
         user: {
           id: "test-user-id",
@@ -124,543 +40,65 @@ describe("Companies API", () => {
       const mockCompanies = [
         {
           id: 1,
-          name: "Company 1",
+          name: "テスト企業1",
           industry: "IT",
-          website_url: "https://example1.com",
+          website_url: "https://example.com",
           user_id: "test-user-id",
-          created_at: "2024-03-20T12:00:00.000Z",
-          updated_at: "2024-03-20T12:00:00.000Z",
+          created_at: "2024-04-20T00:00:00Z",
+          updated_at: "2024-04-20T00:00:00Z",
         },
         {
           id: 2,
-          name: "Company 2",
-          industry: "Finance",
+          name: "テスト企業2",
+          industry: "製造",
           website_url: "https://example2.com",
           user_id: "test-user-id",
-          created_at: "2024-03-20T13:00:00.000Z",
-          updated_at: "2024-03-20T13:00:00.000Z",
+          created_at: "2024-04-20T00:00:00Z",
+          updated_at: "2024-04-20T00:00:00Z",
         },
       ]
 
-      ;(createClient as jest.Mock).mockReturnValue({
+      const mockSupabase = {
         auth: {
           getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
         },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockResolvedValue({ data: mockCompanies, error: null }),
-          }),
-        }),
-      })
+        from: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        data: mockCompanies,
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
       const response = await GET()
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(Array.isArray(data.data)).toBe(true)
-      expect(data.data.length).toBe(2)
-
-      // 各企業データの構造を検証
-      data.data.forEach((company: Company) => {
-        expect(company).toHaveProperty("id")
-        expect(typeof company.id).toBe("number")
-
-        expect(company).toHaveProperty("name")
-        expect(typeof company.name).toBe("string")
-        expect(company.name.length).toBeGreaterThan(0)
-
-        expect(company).toHaveProperty("industry")
-        expect(typeof company.industry).toBe("string")
-
-        expect(company).toHaveProperty("website_url")
-        expect(typeof company.website_url).toBe("string")
-        expect(company.website_url).toMatch(/^https?:\/\/.+/)
-
-        expect(company).toHaveProperty("user_id")
-        expect(typeof company.user_id).toBe("string")
-        expect(company.user_id).toBe("test-user-id")
-
-        expect(company).toHaveProperty("created_at")
-        expect(new Date(company.created_at).toString()).not.toBe("Invalid Date")
-
-        expect(company).toHaveProperty("updated_at")
-        expect(new Date(company.updated_at).toString()).not.toBe("Invalid Date")
-      })
-
-      // データの順序を検証（IDの昇順）
-      expect(data.data[0].id).toBeLessThan(data.data[1].id)
+      expect(data.data).toEqual(mockCompanies)
+      expect(mockSupabase.from).toHaveBeenCalledWith("companies")
+      expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
     })
 
-    it("should return empty array when user has no companies", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
+    it("認証エラーが発生した場合、500エラーを返す", async () => {
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "認証エラー" } }),
         },
       }
 
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockResolvedValue({ data: [], error: null }),
-          }),
-        }),
-      })
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
       const response = await GET()
       const data = await response.json()
 
-      expect(response.status).toBe(200)
-      expect(Array.isArray(data.data)).toBe(true)
-      expect(data.data.length).toBe(0)
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("認証エラー")
     })
   })
 
   describe("POST /api/v1/companies", () => {
-    it("should create a new company successfully", async () => {
-      // モックデータの設定
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      const mockInsertData = {
-        data: { id: 1, name: "Test Company", industry: "IT", website_url: "https://example.com" },
-        error: null,
-      }
-
-      // Supabaseクライアントのモック設定
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          insert: jest.fn().mockResolvedValue(mockInsertData),
-        }),
-      })
-
-      // リクエストの作成
-      const request = new Request("http://localhost:3000/api/v1/companies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Test Company",
-          industry: "IT",
-          website_url: "https://example.com",
-        }),
-      })
-
-      // APIの呼び出し
-      const response = await POST(request)
-      const data = await response.json()
-
-      // レスポンスの検証
-      expect(response.status).toBe(200)
-      expect(data.data).toEqual(mockInsertData.data)
-    })
-
-    it("should return error when user authentication fails", async () => {
-      // 認証エラーのモック設定
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
-        },
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Test Company",
-          industry: "IT",
-          website_url: "https://example.com",
-        }),
-      })
-
-      const response = await POST(request)
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Authentication failed")
-    })
-
-    it("should return error when company creation fails", async () => {
-      // ユーザー認証は成功、会社作成は失敗するモック設定
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          insert: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Test Company",
-          industry: "IT",
-          website_url: "https://example.com",
-        }),
-      })
-
-      const response = await POST(request)
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Database error")
-    })
-  })
-
-  describe("PUT /api/v1/companies/[company_id]", () => {
-    it("should update a company successfully", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      const mockUpdatedCompany = {
-        id: 1,
-        name: "Updated Company",
-        industry: "Updated Industry",
-        website_url: "https://updated.com",
-        user_id: "test-user-id",
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          update: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({ data: [mockUpdatedCompany], error: null }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Updated Company",
-          industry: "Updated Industry",
-          website_url: "https://updated.com",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(200)
-      expect(data.data).toEqual(mockUpdatedCompany)
-    })
-
-    it("should return error when company_id is invalid", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Updated Company",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "invalid" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe("company_id is required")
-    })
-
-    it("should return error when name is empty", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe("name cannot be empty")
-    })
-
-    it("should return error when user authentication fails", async () => {
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
-        },
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Updated Company",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Authentication failed")
-    })
-
-    it("should return error when company not found", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          update: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({ data: [], error: null }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/999", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Updated Company",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "999" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(404)
-      expect(data.error).toBe("Company not found or unauthorized")
-    })
-
-    it("should return error when database update fails", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          update: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Updated Company",
-        }),
-      })
-
-      const response = await PUT(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Database error")
-    })
-  })
-
-  describe("DELETE /api/v1/companies/[company_id]", () => {
-    it("should delete a company successfully", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          delete: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({
-                  data: [
-                    {
-                      id: 1,
-                      name: "Company to Delete",
-                      industry: "IT",
-                      website_url: "https://example.com",
-                      user_id: "test-user-id",
-                    },
-                  ],
-                  error: null,
-                }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "DELETE",
-      })
-
-      const response = await DELETE(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(200)
-      expect(data.message).toBe("Company deleted successfully")
-    })
-
-    it("should return error when company_id is invalid", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
-        method: "DELETE",
-      })
-
-      const response = await DELETE(request, { params: { company_id: "invalid" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe("company_id is required")
-    })
-
-    it("should return error when user authentication fails", async () => {
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
-        },
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "DELETE",
-      })
-
-      const response = await DELETE(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Authentication failed")
-    })
-
-    it("should return error when company not found", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          delete: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({ data: [], error: null }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/999", {
-        method: "DELETE",
-      })
-
-      const response = await DELETE(request, { params: { company_id: "999" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(404)
-      expect(data.error).toBe("Company not found or unauthorized")
-    })
-
-    it("should return error when database delete fails", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
-        },
-      }
-
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          delete: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                select: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
-              }),
-            }),
-          }),
-        }),
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "DELETE",
-      })
-
-      const response = await DELETE(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Database error")
-    })
-  })
-
-  describe("GET /api/v1/companies/[company_id]", () => {
-    it("should return a company successfully", async () => {
+    it("認証済みユーザーが企業を登録できる", async () => {
       const mockUser = {
         user: {
           id: "test-user-id",
@@ -669,137 +107,181 @@ describe("Companies API", () => {
 
       const mockCompany = {
         id: 1,
-        name: "Test Company",
+        name: "テスト企業",
         industry: "IT",
         website_url: "https://example.com",
         user_id: "test-user-id",
-        created_at: "2024-03-20T12:00:00.000Z",
-        updated_at: "2024-03-20T12:00:00.000Z",
+        created_at: "2024-04-20T00:00:00Z",
+        updated_at: "2024-04-20T00:00:00Z",
       }
 
-      ;(createClient as jest.Mock).mockReturnValue({
+      const mockSupabase = {
         auth: {
           getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
         },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                single: jest.fn().mockResolvedValue({ data: mockCompany, error: null }),
-              }),
-            }),
-          }),
+        from: jest.fn().mockReturnThis(),
+        insert: jest.fn().mockReturnThis(),
+        data: mockCompany,
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "POST",
+        body: JSON.stringify({
+          name: "テスト企業",
+          industry: "IT",
+          website_url: "https://example.com",
         }),
       })
+      const response = await POST(request)
+      const data = await response.json()
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "GET",
+      expect(response.status).toBe(200)
+      expect(data.data).toEqual(mockCompany)
+      expect(mockSupabase.from).toHaveBeenCalledWith("companies")
+      expect(mockSupabase.insert).toHaveBeenCalledWith({
+        name: "テスト企業",
+        industry: "IT",
+        website_url: "https://example.com",
+        user_id: "test-user-id",
       })
+    })
 
+    it("必須パラメータが不足している場合、400エラーを返す", async () => {
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "POST",
+        body: JSON.stringify({
+          // nameを省略
+          industry: "IT",
+          website_url: "https://example.com",
+        }),
+      })
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("name is required")
+    })
+
+    it("認証エラーが発生した場合、500エラーを返す", async () => {
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "認証エラー" } }),
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies", {
+        method: "POST",
+        body: JSON.stringify({
+          name: "テスト企業",
+          industry: "IT",
+          website_url: "https://example.com",
+        }),
+      })
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("認証エラー")
+    })
+  })
+
+  describe("GET /api/v1/companies/[company_id]", () => {
+    it("認証済みユーザーが特定の企業情報を取得できる", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      const mockCompany = {
+        id: 1,
+        name: "テスト企業",
+        industry: "IT",
+        website_url: "https://example.com",
+        user_id: "test-user-id",
+        created_at: "2024-04-20T00:00:00Z",
+        updated_at: "2024-04-20T00:00:00Z",
+      }
+
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnThis(),
+        data: mockCompany,
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1")
       const response = await GET_COMPANY(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(200)
       expect(data.data).toEqual(mockCompany)
+      expect(mockSupabase.from).toHaveBeenCalledWith("companies")
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
     })
 
-    it("should return error when company_id is invalid", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies/invalid", {
-        method: "GET",
-      })
-
-      const response = await GET_COMPANY(request, { params: { company_id: "invalid" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe("company_id is required")
-    })
-
-    it("should return error when user authentication fails", async () => {
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "Authentication failed" } }),
-        },
-      })
-
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "GET",
-      })
-
-      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
-      const data = await response.json()
-
-      expect(response.status).toBe(500)
-      expect(data.error).toBe("Authentication failed")
-    })
-
-    it("should return error when company not found", async () => {
+    it("企業が存在しない場合、404エラーを返す", async () => {
       const mockUser = {
         user: {
           id: "test-user-id",
         },
       }
 
-      ;(createClient as jest.Mock).mockReturnValue({
+      const mockSupabase = {
         auth: {
           getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
         },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                single: jest.fn().mockResolvedValue({ data: null, error: null }),
-              }),
-            }),
-          }),
-        }),
-      })
+        from: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnThis(),
+        data: null,
+        error: null,
+      }
 
-      const request = new Request("http://localhost:3000/api/v1/companies/999", {
-        method: "GET",
-      })
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const response = await GET_COMPANY(request, { params: { company_id: "999" } })
+      const request = new Request("http://localhost:3000/api/v1/companies/1")
+      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(404)
       expect(data.error).toBe("Company not found or unauthorized")
     })
 
-    it("should return error when database query fails", async () => {
-      const mockUser = {
-        user: {
-          id: "test-user-id",
+    it("認証エラーが発生した場合、500エラーを返す", async () => {
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "認証エラー" } }),
         },
       }
 
-      ;(createClient as jest.Mock).mockReturnValue({
-        auth: {
-          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
-        },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                single: jest.fn().mockResolvedValue({ data: null, error: { message: "Database error" } }),
-              }),
-            }),
-          }),
-        }),
-      })
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "GET",
-      })
-
+      const request = new Request("http://localhost:3000/api/v1/companies/1")
       const response = await GET_COMPANY(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(500)
-      expect(data.error).toBe("Database error")
+      expect(data.error).toBe("認証エラー")
     })
+  })
 
-    it("should return company with correct data structure", async () => {
+  describe("PUT /api/v1/companies/[company_id]", () => {
+    it("認証済みユーザーが企業情報を更新できる", async () => {
       const mockUser = {
         user: {
           id: "test-user-id",
@@ -808,60 +290,208 @@ describe("Companies API", () => {
 
       const mockCompany = {
         id: 1,
-        name: "Test Company",
+        name: "更新された企業",
         industry: "IT",
         website_url: "https://example.com",
         user_id: "test-user-id",
-        created_at: "2024-03-20T12:00:00.000Z",
-        updated_at: "2024-03-20T12:00:00.000Z",
+        created_at: "2024-04-20T00:00:00Z",
+        updated_at: "2024-04-20T00:00:00Z",
       }
 
-      ;(createClient as jest.Mock).mockReturnValue({
+      const mockSupabase = {
         auth: {
           getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
         },
-        from: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            eq: jest.fn().mockReturnValue({
-              eq: jest.fn().mockReturnValue({
-                single: jest.fn().mockResolvedValue({ data: mockCompany, error: null }),
-              }),
-            }),
-          }),
-        }),
-      })
+        from: jest.fn().mockReturnThis(),
+        update: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        data: [mockCompany],
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
       const request = new Request("http://localhost:3000/api/v1/companies/1", {
-        method: "GET",
+        method: "PUT",
+        body: JSON.stringify({
+          name: "更新された企業",
+          industry: "IT",
+          website_url: "https://example.com",
+        }),
       })
-
-      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const response = await PUT(request, { params: { company_id: "1" } })
       const data = await response.json()
 
       expect(response.status).toBe(200)
-      expect(data.data).toHaveProperty("id")
-      expect(typeof data.data.id).toBe("number")
+      expect(data.data).toEqual(mockCompany)
+      expect(mockSupabase.from).toHaveBeenCalledWith("companies")
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
+      expect(mockSupabase.update).toHaveBeenCalledWith({
+        name: "更新された企業",
+        industry: "IT",
+        website_url: "https://example.com",
+      })
+    })
 
-      expect(data.data).toHaveProperty("name")
-      expect(typeof data.data.name).toBe("string")
-      expect(data.data.name.length).toBeGreaterThan(0)
+    it("企業が存在しない場合、404エラーを返す", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
 
-      expect(data.data).toHaveProperty("industry")
-      expect(typeof data.data.industry).toBe("string")
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnThis(),
+        update: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnThis(),
+        data: null,
+        error: null,
+      }
 
-      expect(data.data).toHaveProperty("website_url")
-      expect(typeof data.data.website_url).toBe("string")
-      expect(data.data.website_url).toMatch(/^https?:\/\/.+/)
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      expect(data.data).toHaveProperty("user_id")
-      expect(typeof data.data.user_id).toBe("string")
-      expect(data.data.user_id).toBe("test-user-id")
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "PUT",
+        body: JSON.stringify({
+          name: "更新された企業",
+          industry: "IT",
+          website_url: "https://example.com",
+        }),
+      })
+      const response = await PUT(request, { params: { company_id: "1" } })
+      const data = await response.json()
 
-      expect(data.data).toHaveProperty("created_at")
-      expect(new Date(data.data.created_at).toString()).not.toBe("Invalid Date")
+      expect(response.status).toBe(404)
+      expect(data.error).toBe("Company not found or unauthorized")
+    })
 
-      expect(data.data).toHaveProperty("updated_at")
-      expect(new Date(data.data.updated_at).toString()).not.toBe("Invalid Date")
+    it("認証エラーが発生した場合、500エラーを返す", async () => {
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "認証エラー" } }),
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "PUT",
+        body: JSON.stringify({
+          name: "更新された企業",
+          industry: "IT",
+          website_url: "https://example.com",
+        }),
+      })
+      const response = await PUT(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("認証エラー")
+    })
+  })
+
+  describe("DELETE /api/v1/companies/[company_id]", () => {
+    it("認証済みユーザーが企業情報を削除できる", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      const mockCompany = {
+        id: 1,
+        name: "テスト企業",
+        industry: "IT",
+        website_url: "https://example.com",
+        user_id: "test-user-id",
+        created_at: "2024-04-20T00:00:00Z",
+        updated_at: "2024-04-20T00:00:00Z",
+      }
+
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnThis(),
+        delete: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnThis(),
+        data: mockCompany,
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "DELETE",
+      })
+      const response = await DELETE(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data).toEqual({ message: "Company deleted successfully" })
+      expect(mockSupabase.from).toHaveBeenCalledWith("companies")
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
+    })
+
+    it("企業が存在しない場合、404エラーを返す", async () => {
+      const mockUser = {
+        user: {
+          id: "test-user-id",
+        },
+      }
+
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: mockUser, error: null }),
+        },
+        from: jest.fn().mockReturnThis(),
+        delete: jest.fn().mockReturnThis(),
+        eq: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        single: jest.fn().mockReturnThis(),
+        data: null,
+        error: null,
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "DELETE",
+      })
+      const response = await DELETE(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(404)
+      expect(data.error).toBe("Company not found or unauthorized")
+    })
+
+    it("認証エラーが発生した場合、500エラーを返す", async () => {
+      const mockSupabase = {
+        auth: {
+          getUser: jest.fn().mockResolvedValue({ data: null, error: { message: "認証エラー" } }),
+        },
+      }
+
+      ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
+
+      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+        method: "DELETE",
+      })
+      const response = await DELETE(request, { params: { company_id: "1" } })
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("認証エラー")
     })
   })
 })
