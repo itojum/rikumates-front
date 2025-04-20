@@ -15,8 +15,9 @@ export type Database = {
           id: string
           industry: string | null
           name: string | null
+          note: string
           updated_at: string
-          user_id: string | null
+          user_id: string
           website_url: string | null
         }
         Insert: {
@@ -24,8 +25,9 @@ export type Database = {
           id?: string
           industry?: string | null
           name?: string | null
-          updated_at: string
-          user_id?: string | null
+          note?: string
+          updated_at?: string
+          user_id: string
           website_url?: string | null
         }
         Update: {
@@ -33,13 +35,56 @@ export type Database = {
           id?: string
           industry?: string | null
           name?: string | null
+          note?: string
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
           website_url?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "companies_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_applications: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          id: number
+          notes: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          id?: number
+          notes?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          id?: number
+          notes?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
