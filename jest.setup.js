@@ -13,10 +13,14 @@ class MockHeaders {
 
 class MockRequest {
   constructor(input, init = {}) {
-    this.url = input
+    this._url = input
     this.method = init.method || "GET"
     this.headers = new MockHeaders(init.headers || {})
     this._body = init.body
+  }
+
+  get url() {
+    return this._url
   }
 
   async json() {
@@ -40,6 +44,14 @@ class MockResponse {
 global.Request = MockRequest
 global.Response = MockResponse
 global.Headers = MockHeaders
+
+// NextRequestのモック
+jest.mock("next/server", () => ({
+  NextRequest: MockRequest,
+  NextResponse: {
+    json: (body, init) => new MockResponse(body, init),
+  },
+}))
 
 // テスト環境での環境変数の設定
 process.env.NEXT_PUBLIC_SUPABASE_URL = "https://test.supabase.co"
