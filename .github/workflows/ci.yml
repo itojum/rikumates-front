@@ -18,9 +18,16 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          
+      - name: Create .npmrc file
+        run: |
+          echo "supabase.cli.skip=true" > .npmrc
+          echo "legacy-peer-deps=true" >> .npmrc
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
+        env:
+          NPM_CONFIG_SUPABASE_CLI_SKIP: "true"
 
       - name: Run format check
         run: npm run lint:format

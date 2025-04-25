@@ -1,7 +1,7 @@
-'use server'
+"use server"
 
-import { createClient } from '@/lib/supabase/server'
-import { handleAuthError } from '@/utils/errorRedirect'
+import { createClient } from "@/lib/supabase/server"
+import { handleAuthError } from "@/utils/errorRedirect"
 
 export async function signOut(): Promise<boolean> {
   const supabase = await createClient()
