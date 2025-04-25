@@ -57,32 +57,35 @@ export type Database = {
         Row: {
           company_id: string
           created_at: string
-          event_type: string
           id: string
           location: string
           notes: string
           scheduled_at: string
+          title: string
           updated_at: string
+          user_id: string
         }
         Insert: {
           company_id?: string
           created_at?: string
-          event_type?: string
           id?: string
           location?: string
           notes?: string
           scheduled_at?: string
+          title?: string
           updated_at?: string
+          user_id?: string
         }
         Update: {
           company_id?: string
           created_at?: string
-          event_type?: string
           id?: string
           location?: string
           notes?: string
           scheduled_at?: string
+          title?: string
           updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -90,6 +93,13 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -120,6 +130,54 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      todos: {
+        Row: {
+          company_id: string
+          complated: boolean
+          created_at: string
+          due_date: string
+          id: number
+          task_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string
+          complated?: boolean
+          created_at?: string
+          due_date?: string
+          id?: number
+          task_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          company_id?: string
+          complated?: boolean
+          created_at?: string
+          due_date?: string
+          id?: number
+          task_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "todos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
