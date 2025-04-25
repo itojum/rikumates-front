@@ -8,10 +8,10 @@ import { CompanyUpdate } from "@/types/database"
  * @param params - パスパラメータ
  */
 export async function GET(request: Request, { params }: { params: { company_id: string } }) {
-  const companyId = parseInt(params.company_id)
+  const { company_id } = params
 
   // バリデーションチェック
-  if (!companyId) {
+  if (!company_id) {
     return NextResponse.json({ error: "company_id is required" }, { status: 400 })
   }
 
@@ -28,7 +28,7 @@ export async function GET(request: Request, { params }: { params: { company_id: 
   const { data: company, error: companyError } = await supabase
     .from("companies")
     .select("*")
-    .eq("id", companyId)
+    .eq("id", company_id)
     .eq("user_id", user.user?.id)
     .single()
 
@@ -51,10 +51,10 @@ export async function GET(request: Request, { params }: { params: { company_id: 
 export async function PUT(request: Request, { params }: { params: { company_id: string } }) {
   // リクエストボディからデータを取得
   const { name, industry, website_url } = await request.json()
-  const companyId = parseInt(params.company_id)
+  const { company_id } = params
 
   // バリデーションチェック
-  if (!companyId) {
+  if (!company_id) {
     return NextResponse.json({ error: "company_id is required" }, { status: 400 })
   }
   if (!name || name.length === 0) {
@@ -81,7 +81,7 @@ export async function PUT(request: Request, { params }: { params: { company_id: 
   const { data: updateResult, error: updateError } = await supabase
     .from("companies")
     .update(updateData)
-    .eq("id", companyId)
+    .eq("id", company_id)
     .eq("user_id", user.user?.id)
     .select()
 
@@ -102,10 +102,10 @@ export async function PUT(request: Request, { params }: { params: { company_id: 
  * @param params - パスパラメータ
  */
 export async function DELETE(request: Request, { params }: { params: { company_id: string } }) {
-  const companyId = parseInt(params.company_id)
+  const { company_id } = params
 
   // バリデーションチェック
-  if (!companyId) {
+  if (!company_id) {
     return NextResponse.json({ error: "company_id is required" }, { status: 400 })
   }
 
@@ -122,7 +122,7 @@ export async function DELETE(request: Request, { params }: { params: { company_i
   const { data: deleteResult, error: deleteError } = await supabase
     .from("companies")
     .delete()
-    .eq("id", companyId)
+    .eq("id", company_id)
     .eq("user_id", user.user?.id)
     .select()
 
