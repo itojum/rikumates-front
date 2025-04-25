@@ -1,4 +1,10 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   public: {
@@ -49,7 +55,7 @@ export type Database = {
       }
       events: {
         Row: {
-          company_id: string
+          company_id: string | null
           created_at: string
           id: string
           location: string
@@ -60,7 +66,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          company_id?: string
+          company_id?: string | null
           created_at?: string
           id?: string
           location?: string
@@ -71,7 +77,7 @@ export type Database = {
           user_id?: string
         }
         Update: {
-          company_id?: string
+          company_id?: string | null
           created_at?: string
           id?: string
           location?: string
@@ -127,31 +133,34 @@ export type Database = {
       }
       todos: {
         Row: {
-          company_id: string
+          company_id: string | null
           complated: boolean
           created_at: string
           due_date: string
           id: number
+          notes: string
           task_name: string
           updated_at: string
           user_id: string
         }
         Insert: {
-          company_id?: string
+          company_id?: string | null
           complated?: boolean
           created_at?: string
           due_date?: string
           id?: number
+          notes?: string
           task_name?: string
           updated_at?: string
           user_id?: string
         }
         Update: {
-          company_id?: string
+          company_id?: string | null
           complated?: boolean
           created_at?: string
           due_date?: string
           id?: number
+          notes?: string
           task_name?: string
           updated_at?: string
           user_id?: string
@@ -208,8 +217,10 @@ export type Tables<
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -217,7 +228,9 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof Database },
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database
   }
@@ -238,7 +251,9 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"] | { schema: keyof Database },
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof Database
   }
@@ -259,7 +274,9 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"] | { schema: keyof Database },
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof Database },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof Database
   }
@@ -272,7 +289,9 @@ export type Enums<
     : never
 
 export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"] | { schema: keyof Database },
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database
   }
