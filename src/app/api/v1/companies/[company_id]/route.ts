@@ -7,10 +7,7 @@ import { CompanyUpdate } from "@/types/database"
  * @param request - リクエストオブジェクト
  * @param params - ルートパラメータ
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ company_id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ company_id: string }> }) {
   const { company_id } = await params
 
   // バリデーションチェック
@@ -51,10 +48,7 @@ export async function GET(
  * @param request - リクエストオブジェクト
  * @param params - ルートパラメータ
  */
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ company_id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ company_id: string }> }) {
   // リクエストボディからデータを取得
   const { name, industry, website_url } = await request.json()
   const { company_id } = await params
@@ -107,10 +101,7 @@ export async function PUT(
  * @param request - リクエストオブジェクト
  * @param context - ルートコンテキスト
  */
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ company_id: string }> }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ company_id: string }> }) {
   const { company_id } = await params
 
   // バリデーションチェック
