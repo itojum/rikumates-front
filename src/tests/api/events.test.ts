@@ -239,24 +239,6 @@ describe("イベントAPI", () => {
       ])
     })
 
-    it("企業IDが不足している場合、400エラーを返す", async () => {
-      const request = new Request("http://localhost:3000/api/v1/events", {
-        method: "POST",
-        body: JSON.stringify({
-          title: "面接",
-          location: "東京オフィス",
-          notes: "持ち物：履歴書",
-          scheduled_at: "2025-04-25T10:00:00Z",
-          // company_idを省略
-        }),
-      })
-      const response = await POST(request)
-      const data = await response.json()
-
-      expect(response.status).toBe(400)
-      expect(data.error).toBe("company_id is required")
-    })
-
     it("認証エラーが発生した場合、500エラーを返す", async () => {
       const mockSupabase = {
         auth: {

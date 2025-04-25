@@ -229,7 +229,7 @@ describe("企業API", () => {
       expect(response.status).toBe(200)
       expect(data.data).toEqual(mockCompany)
       expect(mockSupabase.from).toHaveBeenCalledWith("companies")
-      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", "1")
       expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
     })
 
@@ -326,7 +326,7 @@ describe("企業API", () => {
       expect(response.status).toBe(200)
       expect(data.data).toEqual(mockCompany)
       expect(mockSupabase.from).toHaveBeenCalledWith("companies")
-      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", "1")
       expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
       expect(mockSupabase.update).toHaveBeenCalledWith({
         name: "更新された企業",
@@ -439,7 +439,7 @@ describe("企業API", () => {
       expect(response.status).toBe(200)
       expect(data).toEqual({ message: "Company deleted successfully" })
       expect(mockSupabase.from).toHaveBeenCalledWith("companies")
-      expect(mockSupabase.eq).toHaveBeenCalledWith("id", 1)
+      expect(mockSupabase.eq).toHaveBeenCalledWith("id", "1")
       expect(mockSupabase.eq).toHaveBeenCalledWith("user_id", "test-user-id")
     })
 
