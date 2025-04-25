@@ -9,10 +9,6 @@ export type Company = Tables<'companies'>
 export type CompanyInsert = TablesInsert<'companies'>
 export type CompanyUpdate = TablesUpdate<'companies'>
 
-export type JobApplication = Tables<'job_applications'>
-export type JobApplicationInsert = TablesInsert<'job_applications'>
-export type JobApplicationUpdate = TablesUpdate<'job_applications'>
-
 // 列挙型のエイリアス
 export type JobHuntType = Enums<'job_hunt'>
 
