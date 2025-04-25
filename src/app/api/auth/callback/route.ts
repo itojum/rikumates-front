@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 function getRedirectUrl(request: Request, next: string): string {
   const { origin } = new URL(request.url)
@@ -17,7 +17,7 @@ function getRedirectUrl(request: Request, next: string): string {
   return `${origin}${next}`
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const code = searchParams.get("code")
   const next = searchParams.get("next") ?? "/"

@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
 import { validateTodo } from "@/utils/validate"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export const GET = async (request: Request) => {
+export const GET = async (request: NextRequest) => {
   // paramsの取得
   const { searchParams } = new URL(request.url)
   const companyId = searchParams.get("company_id")
@@ -36,7 +36,7 @@ export const GET = async (request: Request) => {
   return NextResponse.json({ data }, { status: 200 })
 }
 
-export const POST = async (request: Request) => {
+export const POST = async (request: NextRequest) => {
   try {
     // リクエストボディからデータを取得
     const { title, location, notes, scheduled_at, company_id } = await request.json()

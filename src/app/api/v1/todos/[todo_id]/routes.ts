@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
 import { TodoUpdate } from "@/types/database"
 import { validateTodo } from "@/utils/validate"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export const GET = async (request: Request, { params }: { params: { todo_id: string } }) => {
+export const GET = async (request: NextRequest, { params }: { params: { todo_id: string } }) => {
   const { todo_id } = params
 
   // Supabaseクライアントの初期化

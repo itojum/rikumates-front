@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyInsert } from "@/types/database"
 
@@ -28,7 +28,7 @@ export async function GET() {
  * 企業情報を登録するエンドポイント
  * @param request - リクエストオブジェクト
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // リクエストボディからデータを取得
     const { name, industry, website_url } = await request.json()

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 /**
  * 特定のプロフィール情報を取得するAPIエンドポイント
@@ -7,7 +7,7 @@ import { NextResponse } from "next/server"
  * @param params.profile_id - 取得するプロフィールのID
  * @returns プロフィール情報 | エラーメッセージ
  */
-export async function GET(request: Request, { params }: { params: { profile_id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { profile_id: string } }) {
   const { profile_id } = params
   const supabase = await createClient()
   const { data: user, error: userError } = await supabase.auth.getUser()
@@ -36,7 +36,7 @@ export async function GET(request: Request, { params }: { params: { profile_id: 
  * @param params.profile_id - 更新するプロフィールのID
  * @returns 更新後のプロフィール情報 | エラーメッセージ
  */
-export async function PUT(request: Request, { params }: { params: { profile_id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { profile_id: string } }) {
   const { profile_id } = params
   const supabase = await createClient()
   const { data: user, error: userError } = await supabase.auth.getUser()
@@ -73,7 +73,7 @@ export async function PUT(request: Request, { params }: { params: { profile_id: 
  * @param params.profile_id - 削除するプロフィールのID
  * @returns 削除されたプロフィール情報 | エラーメッセージ
  */
-export async function DELETE(request: Request, { params }: { params: { profile_id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: { profile_id: string } }) {
   const { profile_id } = params
   const supabase = await createClient()
   const { data: user, error: userError } = await supabase.auth.getUser()

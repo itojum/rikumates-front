@@ -1,20 +1,17 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { CompanyUpdate } from "@/types/database"
-
-// Next.js の Route Handler の型定義
-type RouteContext = {
-  params: { company_id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
 
 /**
  * 企業情報を取得するエンドポイント
  * @param request - リクエストオブジェクト
  * @param context - ルートコンテキスト
  */
-export async function GET(request: Request, context: RouteContext) {
-  const { company_id } = context.params
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { company_id: string } }
+) {
+  const { company_id } = params
 
   // バリデーションチェック
   if (!company_id) {
@@ -54,10 +51,13 @@ export async function GET(request: Request, context: RouteContext) {
  * @param request - リクエストオブジェクト
  * @param context - ルートコンテキスト
  */
-export async function PUT(request: Request, context: RouteContext) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { company_id: string } }
+) {
   // リクエストボディからデータを取得
   const { name, industry, website_url } = await request.json()
-  const { company_id } = context.params
+  const { company_id } = params
 
   // バリデーションチェック
   if (!company_id) {
@@ -107,8 +107,11 @@ export async function PUT(request: Request, context: RouteContext) {
  * @param request - リクエストオブジェクト
  * @param context - ルートコンテキスト
  */
-export async function DELETE(request: Request, context: RouteContext) {
-  const { company_id } = context.params
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { company_id: string } }
+) {
+  const { company_id } = params
 
   // バリデーションチェック
   if (!company_id) {

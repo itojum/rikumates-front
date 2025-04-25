@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { EventInsert } from "@/types/database"
 import { validateEvent } from "@/utils/validate"
@@ -7,7 +7,7 @@ import { validateEvent } from "@/utils/validate"
  * イベント情報を取得するエンドポイント
  * @param request - リクエストオブジェクト
  */
-export const GET = async (request: Request, { params }: { params: { event_id: string } }) => {
+export const GET = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
   const { event_id } = params
 
   // Supabaseクライアントの初期化
@@ -38,7 +38,7 @@ export const GET = async (request: Request, { params }: { params: { event_id: st
  * @param request -　リクエストオブジェクト
  * @returns
  */
-export const PUT = async (request: Request, { params }: { params: { event_id: string } }) => {
+export const PUT = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
   const { event_id } = params
 
   // supabaseクライアントの初期化
@@ -80,7 +80,7 @@ export const PUT = async (request: Request, { params }: { params: { event_id: st
  * イベント情報を削除するエンドポイント
  * @param request - リクエストオブジェクト
  */
-export const DELETE = async (request: Request, { params }: { params: { event_id: string } }) => {
+export const DELETE = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
   const { event_id } = params
 
   // Supabaseクライアントの初期化
