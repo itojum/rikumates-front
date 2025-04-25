@@ -13,6 +13,10 @@ export type Event = Tables<"events">
 export type EventInsert = TablesInsert<"events">
 export type EventUpdate = TablesUpdate<"events">
 
+export type Todo = Tables<'todos'>
+export type TodoInsert = TablesInsert<'todos'>
+export type TodoUpdate = TablesUpdate<'todos'>
+
 // 列挙型のエイリアス
 export type JobHuntType = Enums<"job_hunt">
 

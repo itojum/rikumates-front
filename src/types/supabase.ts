@@ -125,6 +125,54 @@ export type Database = {
         }
         Relationships: []
       }
+      todos: {
+        Row: {
+          company_id: string
+          complated: boolean
+          created_at: string
+          due_date: string
+          id: number
+          task_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string
+          complated?: boolean
+          created_at?: string
+          due_date?: string
+          id?: number
+          task_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          company_id?: string
+          complated?: boolean
+          created_at?: string
+          due_date?: string
+          id?: number
+          task_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "todos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
