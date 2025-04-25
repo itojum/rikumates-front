@@ -42,10 +42,6 @@ export const POST = async (request: Request) => {
     // リクエストボディからデータを取得
     const { title, location, notes, scheduled_at, company_id } = await request.json()
 
-    if (!company_id) {
-      return NextResponse.json({ error: "company_id is required" }, { status: 400 })
-    }
-
     // Supabaseクライアントの初期化
     const supabase = await createClient()
 
