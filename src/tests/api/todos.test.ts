@@ -4,11 +4,18 @@ import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
 import { NextRequest } from "next/server"
 
-// NextResponseのモック
+// NextResponseとNextRequestのモック
 jest.mock("next/server", () => ({
   NextResponse: {
     json: (body: Json, init?: ResponseInit) => new Response(JSON.stringify(body), init),
   },
+  NextRequest: jest.fn().mockImplementation((input, init) => ({
+    url: input,
+    method: init?.method || "GET",
+    headers: new Headers(init?.headers),
+    json: () => Promise.resolve(init?.body ? JSON.parse(init.body) : {}),
+    nextUrl: new URL(input),
+  })),
 }))
 
 // Supabaseクライアントのモック
@@ -24,15 +31,6 @@ jest.mock("@/utils/validate", () => ({
     }
     return null
   }),
-}))
-
-// Requestオブジェクトのモック
-global.Request = jest.fn().mockImplementation((input, init) => ({
-  ...input,
-  ...init,
-  headers: new Headers(init?.headers),
-  json: () => Promise.resolve(init?.body ? JSON.parse(init.body) : {}),
-  url: input,
 }))
 
 describe("TODOsAPI", () => {
