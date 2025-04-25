@@ -25,3 +25,29 @@ export const validateEvent = (event: EventInsert) => {
 
   return null
 }
+
+export const validateTodo = (todo: EventInsert) => {
+  if (!todo.title) {
+    return { error: "title is required" }
+  }
+  if (todo.title.length > 255) {
+    return { error: "title must be less than 255 characters" }
+  } else if (todo.title.length < 1) {
+    return { error: "title is too short" }
+  }
+
+  if (!todo.location) {
+    return { error: "location is required" }
+  }
+  if (todo.location.length > 255) {
+    return { error: "location must be less than 255 characters" }
+  } else if (todo.location.length < 1) {
+    return { error: "location is too short" }
+  }
+
+  if (!todo.scheduled_at) {
+    return { error: "scheduled_at is required" }
+  }
+
+  return null
+}
