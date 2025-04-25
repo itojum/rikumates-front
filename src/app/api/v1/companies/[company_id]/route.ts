@@ -5,13 +5,13 @@ import { CompanyUpdate } from "@/types/database"
 /**
  * 企業情報を取得するエンドポイント
  * @param request - リクエストオブジェクト
- * @param context - ルートコンテキスト
+ * @param params - ルートパラメータ
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { company_id: string } }
+  { params }: { params: Promise<{ company_id: string }> }
 ) {
-  const { company_id } = params
+  const { company_id } = await params
 
   // バリデーションチェック
   if (!company_id) {
@@ -49,15 +49,15 @@ export async function GET(
 /**
  * 企業情報を更新するエンドポイント
  * @param request - リクエストオブジェクト
- * @param context - ルートコンテキスト
+ * @param params - ルートパラメータ
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { company_id: string } }
+  { params }: { params: Promise<{ company_id: string }> }
 ) {
   // リクエストボディからデータを取得
   const { name, industry, website_url } = await request.json()
-  const { company_id } = params
+  const { company_id } = await params
 
   // バリデーションチェック
   if (!company_id) {
@@ -109,9 +109,9 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { company_id: string } }
+  { params }: { params: Promise<{ company_id: string }> }
 ) {
-  const { company_id } = params
+  const { company_id } = await params
 
   // バリデーションチェック
   if (!company_id) {

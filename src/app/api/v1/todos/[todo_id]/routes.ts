@@ -3,8 +3,8 @@ import { TodoUpdate } from "@/types/database"
 import { validateTodo } from "@/utils/validate"
 import { NextRequest, NextResponse } from "next/server"
 
-export const GET = async (request: NextRequest, { params }: { params: { todo_id: string } }) => {
-  const { todo_id } = params
+export const GET = async (request: NextRequest, { params }: { params: Promise<{ todo_id: string }> }) => {
+  const { todo_id } = await params
 
   // Supabaseクライアントの初期化
   const supabase = await createClient()
@@ -22,8 +22,8 @@ export const GET = async (request: NextRequest, { params }: { params: { todo_id:
   return NextResponse.json({ data }, { status: 200 })
 }
 
-export const PUT = async (request: Request, { params }: { params: { todo_id: string } }) => {
-  const { todo_id } = params
+export const PUT = async (request: Request, { params }: { params: Promise<{ todo_id: string }> }) => {
+  const { todo_id } = await params
 
   // Supabaseクライアントの初期化
   const supabase = await createClient()
@@ -58,8 +58,8 @@ export const PUT = async (request: Request, { params }: { params: { todo_id: str
   return NextResponse.json({ data }, { status: 200 })
 }
 
-export const DELETE = async (request: Request, { params }: { params: { todo_id: string } }) => {
-  const { todo_id } = params
+export const DELETE = async (request: Request, { params }: { params: Promise<{ todo_id: string }> }) => {
+  const { todo_id } = await params
 
   // Supabaseクライアントの初期化
   const supabase = await createClient()

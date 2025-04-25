@@ -7,8 +7,8 @@ import { validateEvent } from "@/utils/validate"
  * イベント情報を取得するエンドポイント
  * @param request - リクエストオブジェクト
  */
-export const GET = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
-  const { event_id } = params
+export const GET = async (request: NextRequest, { params }: { params: Promise<{ event_id: string }> }) => {
+  const { event_id } = await params
 
   // Supabaseクライアントの初期化
   const supabase = await createClient()
@@ -38,8 +38,8 @@ export const GET = async (request: NextRequest, { params }: { params: { event_id
  * @param request -　リクエストオブジェクト
  * @returns
  */
-export const PUT = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
-  const { event_id } = params
+export const PUT = async (request: NextRequest, { params }: { params: Promise<{ event_id: string }> }) => {
+  const { event_id } = await params
 
   // supabaseクライアントの初期化
   const supabase = await createClient()
@@ -80,8 +80,8 @@ export const PUT = async (request: NextRequest, { params }: { params: { event_id
  * イベント情報を削除するエンドポイント
  * @param request - リクエストオブジェクト
  */
-export const DELETE = async (request: NextRequest, { params }: { params: { event_id: string } }) => {
-  const { event_id } = params
+export const DELETE = async (request: NextRequest, { params }: { params: Promise<{ event_id: string }> }) => {
+  const { event_id } = await params
 
   // Supabaseクライアントの初期化
   const supabase = await createClient()
