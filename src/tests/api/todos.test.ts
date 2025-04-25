@@ -2,6 +2,7 @@ import { GET, POST } from "@/app/api/v1/todos/routes"
 import { GET as GET_TODO, PUT, DELETE } from "@/app/api/v1/todos/[todo_id]/routes"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
+import { NextRequest } from "next/server"
 
 // NextResponseのモック
 jest.mock("next/server", () => ({
@@ -86,7 +87,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos")
+      const request = new NextRequest("http://localhost:3000/api/v1/todos")
       const response = await GET(request)
       const data = await response.json()
 
@@ -131,7 +132,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos?company_id=1")
+      const request = new NextRequest("http://localhost:3000/api/v1/todos?company_id=1")
       const response = await GET(request)
       const data = await response.json()
 
@@ -151,7 +152,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos")
+      const request = new NextRequest("http://localhost:3000/api/v1/todos")
       const response = await GET(request)
       const data = await response.json()
 
@@ -179,7 +180,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos")
+      const request = new NextRequest("http://localhost:3000/api/v1/todos")
       const response = await GET(request)
       const data = await response.json()
 
@@ -223,7 +224,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos", {
         method: "POST",
         body: JSON.stringify({
           title: "履歴書作成",
@@ -268,7 +269,7 @@ describe("TODOsAPI", () => {
       jest.requireMock("@/utils/validate").validateTodo.mockReturnValueOnce({ error: "task_name is required" })
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos", {
         method: "POST",
         body: JSON.stringify({
           // task_nameを省略
@@ -294,7 +295,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos", {
         method: "POST",
         body: JSON.stringify({
           task_name: "履歴書作成",
@@ -333,7 +334,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos", {
         method: "POST",
         body: JSON.stringify({
           task_name: "履歴書作成",
@@ -384,8 +385,9 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1")
-      const response = await GET_TODO(request, { params: { todo_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1")
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await GET_TODO(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -404,8 +406,9 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1")
-      const response = await GET_TODO(request, { params: { todo_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1")
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await GET_TODO(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -432,8 +435,9 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1")
-      const response = await GET_TODO(request, { params: { todo_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1")
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await GET_TODO(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -474,7 +478,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "PUT",
         body: JSON.stringify({
           task_name: "更新されたタスク",
@@ -484,7 +488,8 @@ describe("TODOsAPI", () => {
           complated: true,
         }),
       })
-      const response = await PUT(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -518,7 +523,7 @@ describe("TODOsAPI", () => {
       jest.requireMock("@/utils/validate").validateTodo.mockReturnValueOnce({ error: "task_name is required" })
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "PUT",
         body: JSON.stringify({
           // task_nameを省略
@@ -528,7 +533,8 @@ describe("TODOsAPI", () => {
           complated: true,
         }),
       })
-      const response = await PUT(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -544,7 +550,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "PUT",
         body: JSON.stringify({
           task_name: "更新されたタスク",
@@ -554,7 +560,8 @@ describe("TODOsAPI", () => {
           complated: true,
         }),
       })
-      const response = await PUT(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -581,7 +588,7 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "PUT",
         body: JSON.stringify({
           task_name: "更新されたタスク",
@@ -591,7 +598,8 @@ describe("TODOsAPI", () => {
           complated: true,
         }),
       })
-      const response = await PUT(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -632,10 +640,11 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -655,10 +664,11 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -685,10 +695,11 @@ describe("TODOsAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/todos/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/todos/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { todo_id: "1" } })
+      const params = Promise.resolve({ todo_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)

@@ -1,8 +1,8 @@
-// filepath: c:\Programming\hobby\rikumates\src\tests\api\events.test.ts
 import { GET, POST } from "@/app/api/v1/events/routes"
 import { GET as GET_EVENT, PUT, DELETE } from "@/app/api/v1/events/[event_id]/routes"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
+import { NextRequest } from "next/server"
 
 // NextResponseのモック
 jest.mock("next/server", () => ({
@@ -77,7 +77,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events")
+      const request = new NextRequest("http://localhost:3000/api/v1/events")
       const response = await GET(request)
       const data = await response.json()
 
@@ -122,7 +122,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events?company_id=1")
+      const request = new NextRequest("http://localhost:3000/api/v1/events?company_id=1")
       const response = await GET(request)
       const data = await response.json()
 
@@ -142,7 +142,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events")
+      const request = new NextRequest("http://localhost:3000/api/v1/events")
       const response = await GET(request)
       const data = await response.json()
 
@@ -170,7 +170,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events")
+      const request = new NextRequest("http://localhost:3000/api/v1/events")
       const response = await GET(request)
       const data = await response.json()
 
@@ -211,7 +211,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events", {
         method: "POST",
         body: JSON.stringify({
           title: "面接",
@@ -248,7 +248,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events", {
         method: "POST",
         body: JSON.stringify({
           title: "面接",
@@ -284,7 +284,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events", {
         method: "POST",
         body: JSON.stringify({
           title: "面接",
@@ -336,8 +336,9 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1")
-      const response = await GET_EVENT(request, { params: { event_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1")
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await GET_EVENT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -368,8 +369,9 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/999")
-      const response = await GET_EVENT(request, { params: { event_id: "999" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/events/999")
+      const params = Promise.resolve({ event_id: "999" })
+      const response = await GET_EVENT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -385,8 +387,9 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1")
-      const response = await GET_EVENT(request, { params: { event_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1")
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await GET_EVENT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -430,7 +433,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "PUT",
         body: JSON.stringify({
           title: "更新された面接",
@@ -440,7 +443,8 @@ describe("イベントAPI", () => {
           company_id: "1",
         }),
       })
-      const response = await PUT(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -476,7 +480,7 @@ describe("イベントAPI", () => {
         validateEvent: () => "タイトルは必須です",
       }))
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "PUT",
         body: JSON.stringify({
           // titleを省略
@@ -486,7 +490,8 @@ describe("イベントAPI", () => {
           company_id: "1",
         }),
       })
-      const response = await PUT(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(400)
@@ -502,7 +507,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "PUT",
         body: JSON.stringify({
           title: "更新された面接",
@@ -512,7 +517,8 @@ describe("イベントAPI", () => {
           company_id: "1",
         }),
       })
-      const response = await PUT(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -540,7 +546,7 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "PUT",
         body: JSON.stringify({
           title: "更新された面接",
@@ -550,7 +556,8 @@ describe("イベントAPI", () => {
           company_id: "1",
         }),
       })
-      const response = await PUT(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -592,10 +599,11 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -615,10 +623,11 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -646,10 +655,11 @@ describe("イベントAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/events/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/events/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { event_id: "1" } })
+      const params = Promise.resolve({ event_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)

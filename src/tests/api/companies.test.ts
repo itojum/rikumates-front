@@ -2,6 +2,7 @@ import { GET, POST } from "@/app/api/v1/companies/route"
 import { GET as GET_COMPANY, PUT, DELETE } from "@/app/api/v1/companies/[company_id]/route"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
+import { NextRequest } from "next/server"
 
 // NextResponseのモック
 jest.mock("next/server", () => ({
@@ -127,7 +128,7 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies", {
         method: "POST",
         body: JSON.stringify({
           name: "テスト企業",
@@ -150,7 +151,7 @@ describe("企業API", () => {
     })
 
     it("必須パラメータが不足している場合、400エラーを返す", async () => {
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies", {
         method: "POST",
         body: JSON.stringify({
           // nameを省略
@@ -174,7 +175,7 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies", {
         method: "POST",
         body: JSON.stringify({
           name: "テスト企業",
@@ -222,8 +223,9 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1")
-      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1")
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await GET_COMPANY(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -254,8 +256,9 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1")
-      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1")
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await GET_COMPANY(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -271,8 +274,9 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1")
-      const response = await GET_COMPANY(request, { params: { company_id: "1" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1")
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await GET_COMPANY(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -312,7 +316,7 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         body: JSON.stringify({
           name: "更新された企業",
@@ -320,7 +324,8 @@ describe("企業API", () => {
           website_url: "https://example.com",
         }),
       })
-      const response = await PUT(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -357,7 +362,7 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         body: JSON.stringify({
           name: "更新された企業",
@@ -365,7 +370,8 @@ describe("企業API", () => {
           website_url: "https://example.com",
         }),
       })
-      const response = await PUT(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -381,7 +387,7 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "PUT",
         body: JSON.stringify({
           name: "更新された企業",
@@ -389,7 +395,8 @@ describe("企業API", () => {
           website_url: "https://example.com",
         }),
       })
-      const response = await PUT(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -430,10 +437,11 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -465,10 +473,11 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -484,10 +493,11 @@ describe("企業API", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/companies/1", {
+      const request = new NextRequest("http://localhost:3000/api/v1/companies/1", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { company_id: "1" } })
+      const params = Promise.resolve({ company_id: "1" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)

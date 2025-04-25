@@ -1,7 +1,7 @@
-// filepath: c:\Programming\hobby\rikumates\src\tests\api\profiles.test.ts
 import { GET, PUT, DELETE } from "@/app/api/v1/profiles/[profile_id]/routes"
 import { createClient } from "@/lib/supabase/server"
 import { Json } from "@/types/database"
+import { NextRequest } from "next/server"
 
 // NextResponseのモック
 jest.mock("next/server", () => ({
@@ -60,8 +60,9 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id")
-      const response = await GET(request, { params: { profile_id: "test-profile-id" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id")
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await GET(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -92,8 +93,9 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id")
-      const response = await GET(request, { params: { profile_id: "test-profile-id" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id")
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await GET(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -109,8 +111,9 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id")
-      const response = await GET(request, { params: { profile_id: "test-profile-id" } })
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id")
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await GET(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -163,14 +166,15 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "PUT",
         body: JSON.stringify({
           name: "新しいユーザー名",
           email: "new@example.com",
         }),
       })
-      const response = await PUT(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -202,14 +206,15 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "PUT",
         body: JSON.stringify({
           name: "新しいユーザー名",
           email: "new@example.com",
         }),
       })
-      const response = await PUT(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -225,14 +230,15 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "PUT",
         body: JSON.stringify({
           name: "新しいユーザー名",
           email: "new@example.com",
         }),
       })
-      const response = await PUT(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -249,10 +255,6 @@ describe("プロフィールAPI", () => {
       const mockExistingProfile = {
         id: "test-profile-id",
         user_id: "test-user-id",
-        name: "古いユーザー名",
-        email: "old@example.com",
-        created_at: "2024-04-20T00:00:00Z",
-        updated_at: "2024-04-20T00:00:00Z",
       }
 
       const mockSupabase = {
@@ -273,14 +275,15 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "PUT",
         body: JSON.stringify({
           name: "新しいユーザー名",
           email: "new@example.com",
         }),
       })
-      const response = await PUT(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await PUT(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -323,10 +326,11 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(200)
@@ -358,10 +362,11 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(404)
@@ -377,10 +382,11 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
@@ -421,10 +427,11 @@ describe("プロフィールAPI", () => {
 
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
-      const request = new Request("http://localhost:3000/api/v1/profiles/test-profile-id", {
+      const request = new NextRequest("http://localhost:3000/api/v1/profiles/test-profile-id", {
         method: "DELETE",
       })
-      const response = await DELETE(request, { params: { profile_id: "test-profile-id" } })
+      const params = Promise.resolve({ profile_id: "test-profile-id" })
+      const response = await DELETE(request, { params })
       const data = await response.json()
 
       expect(response.status).toBe(500)
