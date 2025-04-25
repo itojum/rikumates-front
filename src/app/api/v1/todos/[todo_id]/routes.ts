@@ -15,11 +15,7 @@ export const GET = async (request: Request, { params }: { params: { todo_id: str
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
 
-  const { data, error } = await supabase
-    .from("todos")
-    .select("*")
-    .eq("user_id", user.user?.id)
-    .eq("todo_id", todo_id)
+  const { data, error } = await supabase.from("todos").select("*").eq("user_id", user.user?.id).eq("todo_id", todo_id)
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
@@ -44,10 +40,9 @@ export const PUT = async (request: Request, { params }: { params: { todo_id: str
     notes,
     due_date,
     company_id,
-    complated
+    complated,
   }
-  if(validateTodo(updateData)) {
-    
+  if (validateTodo(updateData)) {
     return NextResponse.json({ error: validateTodo(updateData) }, { status: 400 })
   }
 
@@ -76,11 +71,7 @@ export const DELETE = async (request: Request, { params }: { params: { todo_id: 
   }
 
   // 削除処理
-  const { data, error } = await supabase
-    .from("todos")
-    .delete()
-    .eq("user_id", user.user?.id)
-    .eq("todo_id", todo_id)
+  const { data, error } = await supabase.from("todos").delete().eq("user_id", user.user?.id).eq("todo_id", todo_id)
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }

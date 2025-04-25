@@ -3,7 +3,6 @@ import { validateTodo } from "@/utils/validate"
 import { NextResponse } from "next/server"
 
 export const GET = async (request: Request) => {
-  
   // paramsの取得
   const { searchParams } = new URL(request.url)
   const companyId = searchParams.get("company_id")
@@ -38,7 +37,6 @@ export const GET = async (request: Request) => {
 }
 
 export const POST = async (request: Request) => {
-  
   try {
     // リクエストボディからデータを取得
     const { title, location, notes, scheduled_at, company_id } = await request.json()
@@ -75,7 +73,7 @@ export const POST = async (request: Request) => {
     }
 
     return NextResponse.json({ data }, { status: 201 })
-  } catch  {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

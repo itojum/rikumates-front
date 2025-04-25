@@ -22,7 +22,7 @@ jest.mock("@/utils/validate", () => ({
       return { error: "task_name is required" }
     }
     return null
-  })
+  }),
 }))
 
 // Requestオブジェクトのモック
@@ -266,7 +266,6 @@ describe("TODOsAPI", () => {
 
       // バリデーションエラーを返すようにモック化
       jest.requireMock("@/utils/validate").validateTodo.mockReturnValueOnce({ error: "task_name is required" })
-
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
       const request = new Request("http://localhost:3000/api/v1/todos", {
@@ -517,7 +516,6 @@ describe("TODOsAPI", () => {
 
       // バリデーションエラーを返すようにモック化
       jest.requireMock("@/utils/validate").validateTodo.mockReturnValueOnce({ error: "task_name is required" })
-
       ;(createClient as jest.Mock).mockReturnValue(mockSupabase)
 
       const request = new Request("http://localhost:3000/api/v1/todos/1", {
