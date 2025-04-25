@@ -15,7 +15,6 @@ export async function GET(request: Request, { params }: { params: { profile_id: 
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
 
-
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -103,4 +102,4 @@ export async function DELETE(request: Request, { params }: { params: { profile_i
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
   return NextResponse.json(data)
-} 
+}

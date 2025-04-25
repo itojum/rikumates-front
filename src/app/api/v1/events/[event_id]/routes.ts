@@ -19,7 +19,8 @@ export const GET = async (request: Request, { params }: { params: { event_id: st
     return NextResponse.json({ error: userError.message }, { status: 500 })
   }
 
-  const { data, error } = await supabase.from("events")
+  const { data, error } = await supabase
+    .from("events")
     .select("*")
     .eq("id", event_id)
     .eq("user_id", user.user?.id)
@@ -35,7 +36,7 @@ export const GET = async (request: Request, { params }: { params: { event_id: st
 /**
  * イベント情報を更新するエンドポイント
  * @param request -　リクエストオブジェクト
- * @returns 
+ * @returns
  */
 export const PUT = async (request: Request, { params }: { params: { event_id: string } }) => {
   const { event_id } = params
@@ -55,9 +56,9 @@ export const PUT = async (request: Request, { params }: { params: { event_id: st
     location,
     notes,
     scheduled_at,
-    company_id
+    company_id,
   }
-  if(validateEvent(updateData)) {
+  if (validateEvent(updateData)) {
     return NextResponse.json({ error: validateEvent(updateData) }, { status: 400 })
   }
 
@@ -67,7 +68,7 @@ export const PUT = async (request: Request, { params }: { params: { event_id: st
     .eq("id", event_id)
     .eq("user_id", user.user?.id)
     .select()
-  
+
   if (updateError) {
     return NextResponse.json({ error: updateError.message }, { status: 500 })
   }

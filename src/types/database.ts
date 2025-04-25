@@ -9,9 +9,9 @@ export type Company = Tables<"companies">
 export type CompanyInsert = TablesInsert<"companies">
 export type CompanyUpdate = TablesUpdate<"companies">
 
-export type Event = Tables<'events'>
-export type EventInsert = TablesInsert<'events'>
-export type EventUpdate = TablesUpdate<'events'>
+export type Event = Tables<"events">
+export type EventInsert = TablesInsert<"events">
+export type EventUpdate = TablesUpdate<"events">
 
 // 列挙型のエイリアス
 export type JobHuntType = Enums<"job_hunt">

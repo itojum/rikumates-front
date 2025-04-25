@@ -152,7 +152,11 @@ describe("プロフィールAPI", () => {
         select: jest.fn().mockReturnThis(),
         update: jest.fn().mockReturnThis(),
         eq: jest.fn().mockReturnThis(),
-        single: jest.fn().mockReturnValue({ data: mockExistingProfile }).mockReturnValueOnce({ data: mockExistingProfile }).mockReturnValueOnce({ data: mockUpdatedProfile, error: null }),
+        single: jest
+          .fn()
+          .mockReturnValue({ data: mockExistingProfile })
+          .mockReturnValueOnce({ data: mockExistingProfile })
+          .mockReturnValueOnce({ data: mockUpdatedProfile, error: null }),
         data: mockUpdatedProfile,
         error: null,
       }
@@ -259,7 +263,8 @@ describe("プロフィールAPI", () => {
         select: jest.fn().mockReturnThis(),
         update: jest.fn().mockReturnThis(),
         eq: jest.fn().mockReturnThis(),
-        single: jest.fn()
+        single: jest
+          .fn()
           .mockReturnValueOnce({ data: mockExistingProfile })
           .mockReturnValueOnce({ data: null, error: { message: "データベースエラー" } }),
         data: null,
@@ -308,7 +313,8 @@ describe("プロフィールAPI", () => {
         select: jest.fn().mockReturnThis(),
         delete: jest.fn().mockReturnThis(),
         eq: jest.fn().mockReturnThis(),
-        single: jest.fn()
+        single: jest
+          .fn()
           .mockReturnValueOnce({ data: mockProfile })
           .mockReturnValueOnce({ data: mockProfile, error: null }),
         data: mockProfile,
@@ -405,7 +411,8 @@ describe("プロフィールAPI", () => {
         select: jest.fn().mockReturnThis(),
         delete: jest.fn().mockReturnThis(),
         eq: jest.fn().mockReturnThis(),
-        single: jest.fn()
+        single: jest
+          .fn()
           .mockReturnValueOnce({ data: mockProfile })
           .mockReturnValueOnce({ data: null, error: { message: "データベースエラー" } }),
         data: null,

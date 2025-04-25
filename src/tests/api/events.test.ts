@@ -227,14 +227,16 @@ describe("イベントAPI", () => {
       expect(response.status).toBe(200)
       expect(data.data).toEqual([mockEvent])
       expect(mockSupabase.from).toHaveBeenCalledWith("events")
-      expect(mockSupabase.insert).toHaveBeenCalledWith([{
-        user_id: "test-user-id",
-        company_id: "1",
-        title: "面接",
-        location: "東京オフィス",
-        notes: "持ち物：履歴書",
-        scheduled_at: "2025-04-25T10:00:00Z",
-      }])
+      expect(mockSupabase.insert).toHaveBeenCalledWith([
+        {
+          user_id: "test-user-id",
+          company_id: "1",
+          title: "面接",
+          location: "東京オフィス",
+          notes: "持ち物：履歴書",
+          scheduled_at: "2025-04-25T10:00:00Z",
+        },
+      ])
     })
 
     it("企業IDが不足している場合、400エラーを返す", async () => {
@@ -429,7 +431,7 @@ describe("イベントAPI", () => {
           scheduled_at: "2025-04-26T10:00:00Z",
           created_at: "2025-04-20T00:00:00Z",
           updated_at: "2025-04-24T00:00:00Z",
-        }
+        },
       ]
 
       const mockSupabase = {

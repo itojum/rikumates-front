@@ -18,7 +18,7 @@ export const GET = async (request: Request) => {
   }
 
   // ユーザーIDに紐づく企業情報の取得
-  if(!companyId) {
+  if (!companyId) {
     const { data, error } = await supabase.from("events").select("*").eq("user_id", user.user?.id)
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -26,7 +26,8 @@ export const GET = async (request: Request) => {
     return NextResponse.json({ data }, { status: 200 })
   }
 
-  const { data, error } = await supabase.from("events")
+  const { data, error } = await supabase
+    .from("events")
     .select("*")
     .eq("user_id", user.user?.id)
     .eq("company_id", companyId)
@@ -37,18 +38,11 @@ export const GET = async (request: Request) => {
 }
 
 export const POST = async (request: Request) => {
-  
   try {
     // リクエストボディからデータを取得
-    const { 
-      title,
-      location,
-      notes,
-      scheduled_at,
-      company_id
-    } = await request.json()
+    const { title, location, notes, scheduled_at, company_id } = await request.json()
 
-    if(!company_id) { 
+    if (!company_id) {
       return NextResponse.json({ error: "company_id is required" }, { status: 400 })
     }
 
@@ -68,7 +62,7 @@ export const POST = async (request: Request) => {
       title,
       location,
       notes,
-      scheduled_at
+      scheduled_at,
     }
 
     const validationError = validateEvent(insertData)
@@ -82,7 +76,7 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
     return NextResponse.json({ data }, { status: 200 })
-  } catch  {
+  } catch {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }
