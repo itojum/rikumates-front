@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "@/styles/globals.css"
 import "smarthr-ui/smarthr-ui.css"
 import { AuthProvider } from "@/contexts/AuthContext"
+import { Header } from "@/components/header"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,6 +20,7 @@ const RootLayout = ({
   return (
     <html lang="ja">
       <body className={inter.className}>
+        <Header />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

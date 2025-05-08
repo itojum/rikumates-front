@@ -1,0 +1,1 @@
+export { MyHeader as Header } from "./header"
