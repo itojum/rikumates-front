@@ -20,8 +20,10 @@ const RootLayout = ({
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <Header />
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
