@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // ログイン済み時にログインページにアクセスした場合、ダッシュボードにリダイレクト
-      if (isPublicPath && user && pathname !== "/") {
+      if (isPublicPath && user && pathname === "/login") {
         router.push("/dashboard")
       }
     }
