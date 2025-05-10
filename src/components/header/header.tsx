@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button, DropdownMenuButton, Header } from "smarthr-ui"
+import { Button, DropdownMenuButton, Header as SmarthrHeader } from "smarthr-ui"
 import Image, { StaticImageData } from "next/image"
 import { usePathname } from "next/navigation"
 import styled from "styled-components"
@@ -12,7 +12,7 @@ import logo from "@/assets/logo.png"
 import notImageUser from "@/assets/not_image_user.png"
 import Link from "next/link"
 
-export const MyHeader = () => {
+export const Header = () => {
   const pathname = usePathname()
   const { user, signOut } = useAuthContext()
   const { profile } = useGetProfile(user?.id ?? "")
@@ -31,8 +31,9 @@ export const MyHeader = () => {
     return null
   }
   return (
-    <MHeader
+    <MyHeader
         logo={<LogoImage src={logo} alt="logo" height={50} />}
+        logoHref="/dashboard"
     >
       <WhiteLink href="/companies">企業</WhiteLink>
       <WhiteLink href="/todos">タスク</WhiteLink>
@@ -46,11 +47,11 @@ export const MyHeader = () => {
         <Button onClick={signOut}>ログアウト</Button>
       </DropdownMenuButton>
       )}
-    </MHeader>
+    </MyHeader>
   )
 }
 
-const MHeader = styled(Header)`
+const MyHeader = styled(SmarthrHeader)`
   background-color:rgb(65, 119, 235);
 `
 const LogoImage = styled(Image)`
