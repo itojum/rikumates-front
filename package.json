@@ -15,6 +15,7 @@
     "supabase:generate": "supabase gen types typescript --project-id \"jxtubtwntjhosdewdxgb\" --schema public > src/types/supabase.ts"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "eslint-config-prettier": "^10.1.1",

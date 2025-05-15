@@ -7,6 +7,20 @@ import { CompaniesTbody } from "@/features/companies/CompaniesTbody";
 export default function CompaniesPage() {
   const { companies, loading, error } = useGetCompanies()
 
+  const handleSeed = async () => {
+    try {
+      const response = await fetch("/api/seed", {
+        method: "POST",
+      })
+      if (!response.ok) {
+        throw new Error("シードデータの作成に失敗しました")
+      }
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <main>
       <Cluster style={{ justifyContent: 'space-between' }}>
@@ -15,9 +29,9 @@ export default function CompaniesPage() {
           <Text color="TEXT_GREY">就職活動中の企業情報を管理します</Text>
         </div>
 
-        <Button  prefix={<FaCirclePlusIcon />} variant="primary">新規企業を追加</Button>
+        <Button prefix={<FaCirclePlusIcon />} variant="primary">新規企業を追加</Button>
       </Cluster>
-      
+      <Button onClick={handleSeed}>シードデータを作成</Button>
       <Table style={{ marginTop: '24px' }}>
         <thead>
           <tr>
