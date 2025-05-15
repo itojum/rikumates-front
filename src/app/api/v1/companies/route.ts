@@ -6,7 +6,12 @@ import { CompanyInsert } from "@/types/database"
  * 企業情報を取得するエンドポイント
  * ログインユーザーに紐づく企業情報を全て取得する
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const page = parseInt(searchParams.get("page") || "1")
+  const perPage = 10
+  const offset = (page - 1) * perPage
+
   // Supabaseクライアントの初期化
   const supabase = await createClient()
 
@@ -17,18 +22,26 @@ export async function GET() {
   }
 
   // ユーザーIDに紐づく企業情報の取得
-  const { data, error } = await supabase.from("companies")
-  .select(`
-    *,
-    events (
-      *
-    )
-  `)
-  .eq("user_id", user.user?.id)
+  const { data, error, count } = await supabase.from("companies")
+    .select(`
+      *,
+      events (
+        *
+      )
+    `, { count: "exact" })
+    .eq("user_id", user.user?.id)
+    .range(offset, offset + perPage - 1)
+    .order("created_at", { ascending: false })
+
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
-  return NextResponse.json({ data }, { status: 200 })
+
+  return NextResponse.json({
+    data,
+    totalPages: Math.ceil((count || 0) / perPage),
+    currentPage: page,
+  }, { status: 200 })
 }
 
 /**

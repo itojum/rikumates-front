@@ -4,6 +4,7 @@ import "@/styles/globals.css"
 import "smarthr-ui/smarthr-ui.css"
 import { AuthProvider } from "@/contexts/AuthContext"
 import { Header } from "@/components/header"
+import { IntlProvider } from "@/components/providers/IntlProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,10 +21,12 @@ const RootLayout = ({
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <AuthProvider>
-          <Header />
-          {children}
-        </AuthProvider>
+        <IntlProvider>
+          <AuthProvider>
+            <Header />
+            {children}
+          </AuthProvider>
+        </IntlProvider>
       </body>
     </html>
   )
