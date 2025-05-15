@@ -43,7 +43,9 @@ export const Header = () => {
           triggerSize="s"
           label={<Image src={avatarUrl} alt="avatar" width={30} height={30} />} 
       >
-        <BlackLink href="/profile">{profile?.name}</BlackLink>
+        <Button>
+          <Link href="/profile">{profile?.name}</Link>
+        </Button>
         <Button onClick={signOut}>ログアウト</Button>
       </DropdownMenuButton>
       )}
@@ -61,12 +63,6 @@ const LogoImage = styled(Image)`
 
 const WhiteLink = styled(Link)`
   color: white;
-  text-decoration: none;
-  margin: 0 10px;
-`
-
-const BlackLink = styled(Link)`
-  color: black;
   text-decoration: none;
   margin: 0 10px;
 `
