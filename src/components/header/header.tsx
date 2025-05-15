@@ -41,7 +41,7 @@ export const Header = () => {
       {user && (
         <DropdownMenuButton 
           triggerSize="s"
-          label={<Image src={avatarUrl} alt="avatar" width={30} height={30} />} 
+          label={<Image src={avatarUrl} alt="avatar" width={30} height={30} style={{ borderRadius: "50%" }} />} 
       >
         <Button>
           <Link href="/profile">{profile?.name}</Link>
