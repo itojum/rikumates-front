@@ -1,9 +1,11 @@
 "use client"
 
-import { Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, Table, Text, Th } from "smarthr-ui";
+import { Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, SegmentedControl, Text } from "smarthr-ui";
 import { useGetCompanies } from "@/hooks/companies/useGetCompanies";
-import { CompaniesTbody } from "@/features/companies/CompaniesTbody";
+import { CompaniesTable } from "@/features/companies/CompaniesTable";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { CompanyCards } from "@/features/companies/CompanyCards";
 
 export default function CompaniesPage() {
 
@@ -12,6 +14,7 @@ export default function CompaniesPage() {
 
   const { companies, loading, error, totalPages } = useGetCompanies({ currentPage })
 
+  const [currentStatus, setCurrentStatus] = useState<string>("table")
 
   return (
     <main>
@@ -23,20 +26,25 @@ export default function CompaniesPage() {
 
         <Button prefix={<FaCirclePlusIcon />} variant="primary">新規企業を追加</Button>
       </Cluster>
-      <Table style={{ marginTop: '24px' }}>
-        <thead>
-          <tr>
-            <Th>企業名</Th>
-            <Th>業種</Th>
-            <Th>選考状況</Th>
-            <Th>次回選考</Th>
-            <Th>次回選考日時</Th>
-            <Th>Webサイト</Th>
-          </tr>
-        </thead>
 
-        <CompaniesTbody companies={companies} loading={loading} error={error} />
-      </Table>
+
+      <SegmentedControl
+        style={{ margin: '24px 0' }}
+        options={[
+          { content: 'テーブル表示', value: 'table' },
+          { content: 'カード表示', value: 'card' },
+        ]}
+        value={currentStatus}
+        onClickOption={(value) => setCurrentStatus(value)}
+      />
+
+      {currentStatus === 'table' && (
+        <CompaniesTable companies={companies} loading={loading} error={error} />
+      )}
+
+      {currentStatus === 'card' && (
+        <CompanyCards companies={companies} loading={loading} error={error} />
+      )}
 
       <Center>
         <Pagination
