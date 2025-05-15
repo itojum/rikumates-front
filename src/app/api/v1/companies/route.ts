@@ -17,7 +17,14 @@ export async function GET() {
   }
 
   // ユーザーIDに紐づく企業情報の取得
-  const { data, error } = await supabase.from("companies").select("*").eq("user_id", user.user?.id)
+  const { data, error } = await supabase.from("companies")
+  .select(`
+    *,
+    events (
+      *
+    )
+  `)
+  .eq("user_id", user.user?.id)
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
