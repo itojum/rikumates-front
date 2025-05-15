@@ -1,5 +1,5 @@
 import { DetailCompany } from "@/types/types"
-import { Loader, Td, Text, TextLink } from "smarthr-ui"
+import { Loader, StatusLabel, Td, Text, TextLink } from "smarthr-ui"
 
 type Props = {
   companies: DetailCompany[]
@@ -28,7 +28,9 @@ export const CompaniesTbody = ({ companies, loading, error }: Props) => {
             <tr key={company.id}>
               <Td>{company.name}</Td>
               <Td>{company.industry}</Td>
-              <Td>{company.status}</Td>
+              <Td>
+                <StatusLabel>{company.status}</StatusLabel>
+              </Td>
               <Td>{company.events[0] ? company.events[0].title : '未設定'}</Td>
               <Td>{company.events[0] ? company.events[0].scheduled_at : '未設定'}</Td>
               <Td>
