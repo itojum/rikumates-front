@@ -44,7 +44,7 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
           </table>
           <Cluster justify="space-between">
             <Button disabled={!company.website_url} variant="secondary" prefix={<FaUpRightFromSquareIcon />}>
-              <Link href={company.website_url || ''}>ウェブサイト</Link>
+              <Link href={company.website_url || ''} target="_blank">ウェブサイト</Link>
             </Button>
 
             <Button variant="secondary">
