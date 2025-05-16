@@ -1,32 +1,38 @@
-import { Dropdown as SmartHRDropdown, DropdownTrigger, DropdownContent, Cluster, Button, Stack } from "smarthr-ui"
+import { Dropdown as SmartHRDropdown, DropdownTrigger, DropdownContent, Button, Stack, FloatArea, DropdownCloser } from "smarthr-ui"
 import { ReactNode } from "react"
+
 type Props = {
   trigger: ReactNode
   content: ReactNode
-  onApply?:any
+  onApply?: (e: React.FormEvent<HTMLFormElement>) => void
+  onCancel?: () => void
 }
 
-export const Dropdown = ({ trigger, content, onApply }: Props) => {
+export const Dropdown = ({ trigger, content, onApply, onCancel }: Props) => {
   return (
     <SmartHRDropdown>
       <DropdownTrigger>
         {trigger}
       </DropdownTrigger>
-      <DropdownContent>
-        <Stack>
+      <DropdownContent controllable>
+        <form onSubmit={onApply}>
           <Stack style={{ margin: "15px 20px" }}>
             {content}
           </Stack>
-          <hr />
-          <Cluster style={{ gap: "10px", margin: "15px 20px" }}>
-            <Button variant="secondary">
-            キャンセル
-          </Button>
-          <Button variant="primary" onClick={onApply}>
-            適用
-            </Button>
-          </Cluster>
-        </Stack>
+          <FloatArea 
+            primaryButton={
+              <Button variant="primary" type="submit">適用</Button>
+            } 
+            secondaryButton={
+              <DropdownCloser>
+                <Button variant="secondary" onClick={onCancel}>
+                  キャンセル
+                </Button>
+              </DropdownCloser>
+            } 
+            bottom={0}
+          />
+        </form>
       </DropdownContent>
     </SmartHRDropdown>
   )
