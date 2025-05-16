@@ -1,21 +1,29 @@
 "use client"
 
-import { Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, SegmentedControl, Text } from "smarthr-ui";
+import { Base, Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, Text } from "smarthr-ui";
 import { useGetCompanies } from "@/hooks/companies/useGetCompanies";
 import { CompaniesTable } from "@/features/companies/CompaniesTable";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CompanyCards } from "@/features/companies/CompanyCards";
+import { OperationArea } from "@/features/companies/OperationArea";
 
 export default function CompaniesPage() {
 
   const searchParams = useSearchParams()
   const currentPage = parseInt(searchParams.get("page") || "1")
+  const currentStatus = searchParams.get("status") || "table"
 
   const { companies, loading, error, totalPages } = useGetCompanies({ currentPage })
 
-  const [currentStatus, setCurrentStatus] = useState<string>("table")
-
+  const [query, setQuery] = useState<string>("")
+  
+  const handleStatusChange = (status: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("status", status)
+    window.history.pushState(null, "", `?${params.toString()}`)
+  }
+  
   return (
     <main>
       <Cluster style={{ justifyContent: 'space-between' }}>
@@ -27,31 +35,33 @@ export default function CompaniesPage() {
         <Button prefix={<FaCirclePlusIcon />} variant="primary">新規企業を追加</Button>
       </Cluster>
 
+      <Base style={{ marginTop: 20 }}>
+        <OperationArea
+          query={query}
+          setQuery={setQuery}
+          currentStatus={currentStatus}
+          setCurrentStatus={handleStatusChange}
+        />
 
-      <SegmentedControl
-        style={{ margin: '24px 0' }}
-        options={[
-          { content: 'テーブル表示', value: 'table' },
-          { content: 'カード表示', value: 'card' },
-        ]}
-        value={currentStatus}
-        onClickOption={(value) => setCurrentStatus(value)}
-      />
+        {currentStatus === 'table' && (
+          <CompaniesTable companies={companies} loading={loading} error={error} />
+        )}
 
-      {currentStatus === 'table' && (
-        <CompaniesTable companies={companies} loading={loading} error={error} />
-      )}
-
-      {currentStatus === 'card' && (
-        <CompanyCards companies={companies} loading={loading} error={error} />
-      )}
+        {currentStatus === 'card' && (
+          <CompanyCards companies={companies} loading={loading} error={error} />
+        )}
+      </Base>
 
       <Center>
         <Pagination
           current={currentPage}
           total={totalPages}
           padding={5}
-          hrefTemplate={(page) => `/companies?page=${page}`}
+          hrefTemplate={(page) => {
+            const params = new URLSearchParams(searchParams.toString())
+            params.set("page", page.toString())
+            return `/companies?${params.toString()}`
+          }}
         />
       </Center>
     </main>
