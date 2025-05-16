@@ -1,7 +1,8 @@
 "use client"
 
-import { ThemeProvider } from "smarthr-ui"
+import { createTheme, ThemeProvider } from "smarthr-ui"
 
 export const Providers = ({ children }: { children: React.ReactNode }): React.ReactNode => {
-  return <ThemeProvider>{children}</ThemeProvider>
+  const theme = createTheme()
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>
 }
