@@ -1,4 +1,4 @@
-import { Button, Cluster, FaFilterIcon, SearchInput, SegmentedControl, Stack } from "smarthr-ui"
+import { Button, Cluster, FaFilterIcon, FaSortIcon, SearchInput, SegmentedControl, Stack } from "smarthr-ui"
 
 type Props = {
   query: string
@@ -23,6 +23,9 @@ export const OperationArea = ({ query, setQuery, currentStatus, setCurrentStatus
         </Cluster>
         <Button variant="secondary" prefix={<FaFilterIcon />}>
           絞り込み
+        </Button>
+        <Button variant="secondary" prefix={<FaSortIcon />}>
+          並び替え
         </Button>
       </Cluster>
 
