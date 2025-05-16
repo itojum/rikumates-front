@@ -1,6 +1,5 @@
 import { Cluster, SegmentedControl, Stack } from "smarthr-ui"
 import { SearchForm } from "./OperationActions/SearchForm"
-import { SortButton } from "./OperationActions/SortButton"
 
 type Props = {
   currentStatus: string
@@ -12,7 +11,6 @@ export const OperationArea = ({ currentStatus, setCurrentStatus }: Props) => {
     <Stack style={{ padding: '24px' }}>
       <Cluster>
         <SearchForm />
-        <SortButton />
       </Cluster>
 
       <SegmentedControl

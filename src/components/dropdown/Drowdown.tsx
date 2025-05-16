@@ -21,7 +21,9 @@ export const Dropdown = ({ trigger, content, onApply, onCancel }: Props) => {
           </Stack>
           <FloatArea 
             primaryButton={
-              <Button variant="primary" type="submit">適用</Button>
+              <DropdownCloser>
+                <Button variant="primary" type="submit">適用</Button>
+              </DropdownCloser>
             } 
             secondaryButton={
               <DropdownCloser>
