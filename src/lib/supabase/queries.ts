@@ -7,6 +7,8 @@ interface GetCompaniesParams {
   query: string;
   sort: string;
   order: "asc" | "desc";
+  recruitmentStatus?: string;
+  nextEvent?: string;
 }
 
 /**
@@ -19,6 +21,8 @@ export async function getCompaniesQuery({
   query,
   sort,
   order,
+  recruitmentStatus,
+  nextEvent,
 }: GetCompaniesParams) {
   const supabase = await createClient();
   const offset = (page - 1) * perPage;
@@ -41,6 +45,34 @@ export async function getCompaniesQuery({
     companiesQuery = companiesQuery.or(
       `name.ilike.%${query}%,industry.ilike.%${query}%`,
     );
+  }
+
+  console.log(recruitmentStatus);
+  // 選考状況でフィルタリング
+  if (recruitmentStatus && recruitmentStatus !== "all") {
+    companiesQuery = companiesQuery.eq("status", recruitmentStatus);
+  }
+
+  // 次回選考日時でフィルタリング
+  if (nextEvent && nextEvent !== "all") {
+    const now = new Date();
+    const endDate = new Date();
+
+    switch (nextEvent) {
+      case "within_week":
+        endDate.setDate(now.getDate() + 7);
+        break;
+      case "within_two_weeks":
+        endDate.setDate(now.getDate() + 14);
+        break;
+      case "within_month":
+        endDate.setMonth(now.getMonth() + 1);
+        break;
+    }
+
+    companiesQuery = companiesQuery
+      .gte("next_event_date", now.toISOString())
+      .lte("next_event_date", endDate.toISOString());
   }
 
   // ソート条件を追加

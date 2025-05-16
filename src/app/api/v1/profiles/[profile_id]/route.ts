@@ -11,7 +11,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ profile_id: string }> },
 ) {
-  console.log("hogehogehoge");
   const { profile_id } = await params;
   const supabase = await createClient();
   const { error: userError } = await supabase.auth.getUser();

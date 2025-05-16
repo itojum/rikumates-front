@@ -10,11 +10,14 @@ import { getCompaniesQuery } from "@/lib/supabase/queries";
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
-  const perPage = 10;
+  const perPage = parseInt(searchParams.get("per_page") || "10");
   const query = searchParams.get("query") || "";
   const sort = searchParams.get("sort") || "name";
   const order = searchParams.get("order") as "asc" | "desc" || "asc";
+  const recruitmentStatus = searchParams.get("recruitment_status") || "all";
+  const nextEvent = searchParams.get("next_event") || "all";
 
+  
   try {
     // Supabaseクライアントの初期化
     const supabase = await createClient();
@@ -33,6 +36,8 @@ export async function GET(request: NextRequest) {
       query,
       sort,
       order,
+      recruitmentStatus,
+      nextEvent,
     });
 
     return NextResponse.json({
