@@ -22,6 +22,8 @@ export const useGetCompanies = (
   const [totalPages, setTotalPages] = useState(1);
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
+  const sort = searchParams.get("sort") || "name";
+  const order = searchParams.get("order") || "asc";
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -31,6 +33,12 @@ export const useGetCompanies = (
         params.set("page", currentPage.toString());
         if (query) {
           params.set("query", query);
+        }
+        if (sort) {
+          params.set("sort", sort);
+        }
+        if (order) {
+          params.set("order", order);
         }
         const response = await fetch(`/api/v1/companies?${params.toString()}`);
         const { data, totalPages: pages } = await response.json();
@@ -43,7 +51,7 @@ export const useGetCompanies = (
       }
     };
     fetchCompanies();
-  }, [currentPage, query]);
+  }, [currentPage, query, sort, order]);
 
   return { companies, loading, error, totalPages };
 };

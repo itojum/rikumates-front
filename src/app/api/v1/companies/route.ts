@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { CompanyInsert } from "@/types/database";
+import { getCompaniesQuery } from "@/lib/supabase/queries";
 
 /**
  * 企業情報を取得するエンドポイント
@@ -10,51 +11,42 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const perPage = 10;
-  const offset = (page - 1) * perPage;
   const query = searchParams.get("query") || "";
+  const sort = searchParams.get("sort") || "name";
+  const order = searchParams.get("order") as "asc" | "desc" || "asc";
 
-  // Supabaseクライアントの初期化
-  const supabase = await createClient();
+  try {
+    // Supabaseクライアントの初期化
+    const supabase = await createClient();
 
-  // ログインユーザーの取得
-  const { data: user, error: userError } = await supabase.auth.getUser();
-  if (userError) {
-    return NextResponse.json({ error: userError.message }, { status: 500 });
-  }
+    // ログインユーザーの取得
+    const { data: user, error: userError } = await supabase.auth.getUser();
+    if (userError) {
+      throw userError;
+    }
 
-  // ユーザーIDに紐づく企業情報の取得
-  let companiesQuery = supabase.from("companies")
-    .select(
-      `
-      *,
-      events (
-        *
-      )
-    `,
-      { count: "exact" },
-    )
-    .eq("user_id", user.user?.id);
+    // 企業情報の取得
+    const { data, count } = await getCompaniesQuery({
+      userId: user.user?.id || "",
+      page,
+      perPage,
+      query,
+      sort,
+      order,
+    });
 
-  // 検索クエリがある場合は検索条件を追加
-  if (query) {
-    companiesQuery = companiesQuery.or(
-      `name.ilike.%${query}%,industry.ilike.%${query}%`,
+    return NextResponse.json({
+      data,
+      totalPages: Math.ceil(count / perPage),
+      currentPage: page,
+    }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching companies:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch companies" },
+      { status: 500 },
     );
   }
-
-  const { data, error, count } = await companiesQuery
-    .range(offset, offset + perPage - 1)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json({
-    data,
-    totalPages: Math.ceil((count || 0) / perPage),
-    currentPage: page,
-  }, { status: 200 });
 }
 
 /**
@@ -84,7 +76,7 @@ export async function POST(request: NextRequest) {
     // ログインユーザーの取得
     const { data: user, error: userError } = await supabase.auth.getUser();
     if (userError) {
-      return NextResponse.json({ error: userError.message }, { status: 500 });
+      throw userError;
     }
 
     // 登録データの準備
@@ -98,18 +90,18 @@ export async function POST(request: NextRequest) {
     // データベースへの登録
     const { data, error } = await supabase.from("companies").insert(insertData);
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      throw error;
     }
     if (!data) {
-      return NextResponse.json({ error: "Failed to insert company" }, {
-        status: 500,
-      });
+      throw new Error("Failed to insert company");
     }
+
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    const errorMessage = error instanceof Error
-      ? error.message
-      : "Invalid request body";
-    return NextResponse.json({ error: errorMessage }, { status: 400 });
+    console.error("Error creating company:", error);
+    return NextResponse.json(
+      { error: "Failed to create company" },
+      { status: 500 },
+    );
   }
 }
