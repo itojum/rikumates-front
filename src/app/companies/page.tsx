@@ -4,7 +4,6 @@ import { Base, Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, T
 import { useGetCompanies } from "@/hooks/companies/useGetCompanies";
 import { CompaniesTable } from "@/features/companies/CompaniesTable";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { CompanyCards } from "@/features/companies/CompanyCards";
 import { OperationArea } from "@/features/companies/OperationArea";
 
@@ -15,8 +14,6 @@ export default function CompaniesPage() {
   const currentStatus = searchParams.get("status") || "table"
 
   const { companies, loading, error, totalPages } = useGetCompanies({ currentPage })
-
-  const [query, setQuery] = useState<string>("")
   
   const handleStatusChange = (status: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -37,8 +34,6 @@ export default function CompaniesPage() {
 
       <Base style={{ marginTop: 20 }}>
         <OperationArea
-          query={query}
-          setQuery={setQuery}
           currentStatus={currentStatus}
           setCurrentStatus={handleStatusChange}
         />
