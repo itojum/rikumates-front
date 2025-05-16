@@ -1,13 +1,24 @@
 import { useState } from "react"
 import { Button, SearchInput } from "smarthr-ui"
 import styled from "styled-components"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 export const SearchForm = () => {
-  const [query, setQuery] = useState<string>("")
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [query, setQuery] = useState<string>(searchParams.get("query") || "")
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(query)
+    const params = new URLSearchParams(searchParams.toString())
+    if (query) {
+      params.set("query", query)
+    } else {
+      params.delete("query")
+    }
+    params.set("page", "1") // 検索時は1ページ目に戻す
+    router.push(`${pathname}?${params.toString()}`)
   }
   
   return (
