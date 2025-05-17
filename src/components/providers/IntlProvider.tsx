@@ -11,6 +11,7 @@ const messages = {
   "smarthr-ui/Pagination/items": "件",
   "smarthr-ui/DropdownMenuButton/triggerInactive": "候補を開く",
   "smarthr-ui/DropdownMenuButton/triggerActive": "候補を閉じる",
+  "smarthr-ui/RequiredLabel/text": "必須",
 }
 
 export const IntlProvider = ({ children }: { children: React.ReactNode }) => {

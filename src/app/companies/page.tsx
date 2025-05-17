@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation"
 import { CompanyCards } from "@/features/companies/CompanyCards"
 import { OperationArea } from "@/features/companies/OperationArea"
 import { Suspense } from "react"
+import Link from "next/link"
 
 function CompaniesContent() {
   const searchParams = useSearchParams()
@@ -30,7 +31,7 @@ function CompaniesContent() {
         </div>
 
         <Button prefix={<FaCirclePlusIcon />} variant="primary">
-          新規企業を追加
+          <Link href="/companies/new">新規企業を追加</Link>
         </Button>
       </Cluster>
 
