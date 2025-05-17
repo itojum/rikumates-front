@@ -53,7 +53,7 @@ export const FilterButton = () => {
   return (
     <DropdownWithFloatArea
       trigger={
-        <Button variant="secondary" prefix={<FaFilterIcon />}>
+        <Button variant="secondary" suffix={<FaFilterIcon />}>
           絞り込み
         </Button>
       }
