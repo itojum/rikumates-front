@@ -40,7 +40,7 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
           !error &&
           companies.map((company) => (
             <tr key={company.id}>
-              <Td>{company.name}</Td>
+              <Td><TextLink href={`/companies/${company.id}`}>{company.name}</TextLink></Td>
               <Td>{company.industry}</Td>
               <Td>
                 <StatusLabel>{company.status}</StatusLabel>
