@@ -15,6 +15,7 @@ export const useGetCompanies = () => {
   const order = (searchParams.get("order") as "asc" | "desc") || "asc";
   const recruitmentStatus = searchParams.get("recruitment_status") || "all";
   const nextEvent = searchParams.get("next_event") || "all";
+  const query = searchParams.get("query") || "";
 
   return useQuery<CompaniesResponse>({
     queryKey: [
@@ -26,6 +27,7 @@ export const useGetCompanies = () => {
         order,
         recruitmentStatus,
         nextEvent,
+        query,
       },
     ],
     queryFn: async () => {
@@ -39,6 +41,9 @@ export const useGetCompanies = () => {
       }
       if (nextEvent !== "all") {
         params.set("next_event", nextEvent);
+      }
+      if (query) {
+        params.set("query", query);
       }
 
       const response = await fetch(`/api/v1/companies?${params.toString()}`);

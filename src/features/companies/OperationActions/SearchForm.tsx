@@ -1,12 +1,13 @@
 import { useState } from "react"
 import { Button, SearchInput } from "smarthr-ui"
 import styled from "styled-components"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const SearchForm = () => {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const queryClient = useQueryClient()
   const [query, setQuery] = useState<string>(searchParams.get("query") || "")
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,8 +18,9 @@ export const SearchForm = () => {
     } else {
       params.delete("query")
     }
-    params.set("page", "1") // 検索時は1ページ目に戻す
-    router.push(`${pathname}?${params.toString()}`)
+    params.set("page", "1")
+    window.history.pushState(null, "", `${pathname}?${params.toString()}`)
+    queryClient.invalidateQueries({ queryKey: ["companies"] })
   }
 
   return (

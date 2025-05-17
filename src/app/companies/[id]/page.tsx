@@ -2,13 +2,14 @@
 
 import { Heading, Stack, Text, UpwardLink, Base, Cluster, Button, TextLink, FaPencilIcon, FaTrashIcon, ActionDialog, NotificationBar } from "smarthr-ui"
 import { useGetCompany } from "@/hooks/companies/useGetCompany"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useDeleteCompany } from "@/hooks/companies/useDeleteCompany"
 
 export default function CompanyDetailPage() {
   const params = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { id } = params
   const { company, loading, error } = useGetCompany(id as string)
   const { deleteCompany } = useDeleteCompany()
@@ -18,11 +19,14 @@ export default function CompanyDetailPage() {
     type: "success" | "error"
   } | null>(null)
 
+  const currentQuery = searchParams.toString()
+  const backLink = currentQuery ? `/companies?${currentQuery}` : "/companies"
+
   const handleDelete = async (closeDialog: () => void) => {
     closeDialog()
     try {
       await deleteCompany(id as string)
-      router.push("/companies")
+      router.push(backLink)
     } catch {
       setNotification({
         message: "企業の削除に失敗しました。",
@@ -55,7 +59,7 @@ export default function CompanyDetailPage() {
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
-        <UpwardLink href="/companies" indent={2}>企業一覧へ戻る</UpwardLink>
+        <UpwardLink href={backLink} indent={2}>企業一覧へ戻る</UpwardLink>
       </Stack>
 
       <Stack gap="M">

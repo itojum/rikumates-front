@@ -3,6 +3,7 @@ import Link from "next/link"
 import { FC } from "react"
 import { Base, Button, Cluster, FaUpRightFromSquareIcon, Heading, Loader, StatusLabel, Td, Text } from "smarthr-ui"
 import styled from "styled-components"
+import { useSearchParams } from "next/navigation"
 
 type Props = {
   companies: DetailCompany[]
@@ -11,6 +12,9 @@ type Props = {
 }
 
 export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
+  const searchParams = useSearchParams()
+  const currentQuery = searchParams.toString()
+
   if (loading) {
     return <Loader />
   }
@@ -56,7 +60,7 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
             </Button>
 
             <Button variant="secondary">
-              <Link href={`/companies/${company.id}`}>詳細を見る</Link>
+              <Link href={`/companies/${company.id}?${currentQuery}`}>詳細を見る</Link>
             </Button>
           </Cluster>
         </CompanyCard>
