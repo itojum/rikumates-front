@@ -9,6 +9,6 @@ const Input = styled(InputBase)`
   height: 32px;
 `
 
-export const FormInput: FC<FieldProps<"name" | "industry" | "website_url">> = ({ field }) => (
-  <Input {...field} width={field.name === "industry" ? 200 : 600} onChange={(e) => field.onChange(e.target.value)} />
+export const FormInput: FC<FieldProps<"name" | "industry" | "website_url">> = ({ field, width }) => (
+  <Input {...field} width={width} autoComplete="off" onChange={(e) => field.onChange(e.target.value)} />
 )

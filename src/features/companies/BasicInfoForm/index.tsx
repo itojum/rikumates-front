@@ -51,7 +51,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
               name="name"
               control={control}
               rules={VALIDATION_RULES.name}
-              render={({ field }) => <FormInput field={field} />}
+              render={({ field }) => <FormInput field={field} width={400} />}
             />
           </FormControl>
           <FormControl
@@ -85,7 +85,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
               name="website_url"
               control={control}
               rules={VALIDATION_RULES.website_url}
-              render={({ field }) => <FormInput field={field} />}
+              render={({ field }) => <FormInput field={field} width={600} />}
             />
           </FormControl>
 

@@ -55,6 +55,7 @@ export interface BasicInfoFormProps {
 
 export type FieldProps<T extends keyof BasicInfoFormValues> = {
   field: ControllerRenderProps<BasicInfoFormValues, T>
+  width?: number
 }
 
 export type FormSectionProps = {
