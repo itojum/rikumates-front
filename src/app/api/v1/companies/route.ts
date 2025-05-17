@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // リクエストボディからデータを取得
-    const { name, industry, website_url } = await request.json()
+    const { name, industry, website_url, status, notes } = await request.json()
 
     // バリデーションチェック
     if (!name) {
@@ -92,6 +92,8 @@ export async function POST(request: NextRequest) {
       name,
       industry,
       website_url,
+      status,
+      notes
     }
 
     // データベースへの登録

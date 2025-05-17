@@ -2,14 +2,13 @@
 
 import { FC, KeyboardEvent } from "react"
 import { useForm, Controller } from "react-hook-form"
-import { FormControl, RequiredLabel, Stack, FloatArea, Button, Base } from "smarthr-ui"
+import { FormControl, RequiredLabel, Stack } from "smarthr-ui"
 import { BasicInfoFormProps, BasicInfoFormValues, VALIDATION_RULES } from "./types"
 import { STATUS_OPTIONS } from "./constants"
 import { FormSection } from "./components/FormSection"
 import { FormInput } from "./components/FormInput"
 import { FormSelect } from "./components/FormSelect"
 import { FormTextarea } from "./components/FormTextarea"
-import Link from "next/link"
 
 export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues }) => {
   const {
@@ -34,7 +33,6 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
   }
 
   return (
-    <Base>
       <FormSection title="基本情報">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -109,19 +107,5 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
           </Stack>
         </form>
       </FormSection>
-      <FloatArea
-        primaryButton={
-          <Button type="submit" form="company-form" variant="primary">
-            追加
-          </Button>
-        }
-        secondaryButton={
-          <Link href="/companies">
-            <Button>キャンセル</Button>
-          </Link>
-        }
-        bottom="M"
-      />
-    </Base>
   )
 }
