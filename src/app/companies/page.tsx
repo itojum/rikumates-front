@@ -14,7 +14,9 @@ function CompaniesContent() {
   const currentPage = parseInt(searchParams.get("page") || "1")
   const currentStatus = searchParams.get("status") || "table"
 
-  const { companies, loading, error, totalPages } = useGetCompanies({ currentPage })
+  const { data, isLoading, error } = useGetCompanies()
+  const companies = data?.data || []
+  const totalPages = data?.totalPages || 1
 
   const handleStatusChange = (status: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -40,9 +42,21 @@ function CompaniesContent() {
       <Base style={{ marginTop: 20 }}>
         <OperationArea currentStatus={currentStatus} setCurrentStatus={handleStatusChange} />
 
-        {currentStatus === "table" && <CompaniesTable companies={companies} loading={loading} error={error} />}
+        {currentStatus === "table" && (
+          <CompaniesTable
+            companies={companies}
+            loading={isLoading}
+            error={error ? error.message : null}
+          />
+        )}
 
-        {currentStatus === "card" && <CompanyCards companies={companies} loading={loading} error={error} />}
+        {currentStatus === "card" && (
+          <CompanyCards
+            companies={companies}
+            loading={isLoading}
+            error={error ? error.message : null}
+          />
+        )}
       </Base>
 
       <Center>

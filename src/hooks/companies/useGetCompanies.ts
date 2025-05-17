@@ -1,64 +1,54 @@
-import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
-import { DetailCompany } from "@/types/types"
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { DetailCompany } from "@/types/types";
 
-type Props = {
-  currentPage: number
+interface CompaniesResponse {
+  data: DetailCompany[];
+  totalPages: number;
 }
 
-interface UseGetCompaniesResult {
-  companies: DetailCompany[]
-  loading: boolean
-  error: string | null
-  totalPages: number
-}
+export const useGetCompanies = () => {
+  const searchParams = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
+  const perPage = Number(searchParams.get("per_page")) || 10;
+  const sort = searchParams.get("sort") || "name";
+  const order = (searchParams.get("order") as "asc" | "desc") || "asc";
+  const recruitmentStatus = searchParams.get("recruitment_status") || "all";
+  const nextEvent = searchParams.get("next_event") || "all";
 
-export const useGetCompanies = ({ currentPage }: Props): UseGetCompaniesResult => {
-  const [companies, setCompanies] = useState<DetailCompany[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
-  const [totalPages, setTotalPages] = useState(1)
-  const searchParams = useSearchParams()
-  const query = searchParams.get("query") || ""
-  const sort = searchParams.get("sort") || "name"
-  const order = searchParams.get("order") || "asc"
-  const recruitmentStatus = searchParams.get("recruitment_status") || "all"
-  const nextEvent = searchParams.get("next_event") || "all"
-
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      setLoading(true)
-      try {
-        const params = new URLSearchParams()
-        params.set("page", currentPage.toString())
-        if (query) {
-          params.set("query", query)
-        }
-        if (sort) {
-          params.set("sort", sort)
-        }
-        if (order) {
-          params.set("order", order)
-        }
-        if (recruitmentStatus !== "all") {
-          params.set("recruitment_status", recruitmentStatus)
-        }
-        if (nextEvent !== "all") {
-          params.set("next_event", nextEvent)
-        }
-
-        const response = await fetch(`/api/v1/companies?${params.toString()}`)
-        const { data, totalPages: pages } = await response.json()
-        setCompanies(data)
-        setTotalPages(pages)
-      } catch (error) {
-        setError(error as string)
-      } finally {
-        setLoading(false)
+  return useQuery<CompaniesResponse>({
+    queryKey: [
+      "companies",
+      {
+        page,
+        perPage,
+        sort,
+        order,
+        recruitmentStatus,
+        nextEvent,
+      },
+    ],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      params.set("page", page.toString());
+      params.set("per_page", perPage.toString());
+      params.set("sort", sort);
+      params.set("order", order);
+      if (recruitmentStatus !== "all") {
+        params.set("recruitment_status", recruitmentStatus);
       }
-    }
-    fetchCompanies()
-  }, [currentPage, query, sort, order, recruitmentStatus, nextEvent])
+      if (nextEvent !== "all") {
+        params.set("next_event", nextEvent);
+      }
 
-  return { companies, loading, error, totalPages }
-}
+      const response = await fetch(`/api/v1/companies?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch companies");
+      }
+      return response.json();
+    },
+    staleTime: 1000 * 60 * 5, // 5分間はデータを新鮮とみなす
+    gcTime: 1000 * 60 * 30, // 30分間キャッシュを保持
+    placeholderData: (previousData) => previousData, // 新しいデータを取得中も前のデータを表示
+  });
+};
