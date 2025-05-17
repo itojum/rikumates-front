@@ -40,8 +40,16 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
             </Td>
           </tr>
         )}
+        {companies.length === 0 && (
+          <tr>
+            <Td colSpan={7} style={{ textAlign: "center", padding: "30px 0" }}>
+              <Text>企業が見つかりませんでした</Text>
+            </Td>
+          </tr>
+        )}
         {!loading &&
           !error &&
+          companies.length > 0 &&
           companies.map((company) => (
             <tr key={company.id}>
               <Td>
