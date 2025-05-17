@@ -29,7 +29,7 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
       {companies.map((company) => (
         <CompanyCard key={company.id}>
           <Cluster justify="space-between">
-            <Heading type="blockTitle">{company.name}</Heading>
+            <Heading type="blockTitle" style={{ fontSize: "18px" }}>{company.name}</Heading>
             <StatusLabel>{company.status}</StatusLabel>
           </Cluster>
           <Text color="TEXT_GREY">{company.industry}</Text>
@@ -37,7 +37,7 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
           <div style={{ margin: "16px 0" }}>
             <DefinitionList>
               <DefinitionListItem term="次回選考">
-                {company.events[0] ? company.events[0].title : "未設定"}
+                {company.events ? company.events[0].title : "未設定"}
             </DefinitionListItem>
             <DefinitionListItem term="作成日">
                 {format(new Date(company.created_at), "yyyy/MM/dd")}
