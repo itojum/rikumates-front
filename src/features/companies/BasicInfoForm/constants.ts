@@ -9,7 +9,7 @@ export const STATUS_OPTIONS = [
 ]
 
 
-export const LOCATION_OPTIONS = prefectures.map((prefecture) => ({
-  label: prefecture,
-  value: prefecture,
+export const LOCATION_OPTIONS = Object.values(prefectures).map((prefecture) => ({
+  label: prefecture.value,
+  value: prefecture.value,
 }))
