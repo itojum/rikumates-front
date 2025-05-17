@@ -6,8 +6,9 @@ import { CompaniesTable } from "@/features/companies/CompaniesTable"
 import { useSearchParams } from "next/navigation"
 import { CompanyCards } from "@/features/companies/CompanyCards"
 import { OperationArea } from "@/features/companies/OperationArea"
+import { Suspense } from "react"
 
-export default function CompaniesPage() {
+function CompaniesContent() {
   const searchParams = useSearchParams()
   const currentPage = parseInt(searchParams.get("page") || "1")
   const currentStatus = searchParams.get("status") || "table"
@@ -54,5 +55,13 @@ export default function CompaniesPage() {
         />
       </Center>
     </main>
+  )
+}
+
+export default function CompaniesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CompaniesContent />
+    </Suspense>
   )
 }
