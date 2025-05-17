@@ -20,7 +20,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
       name: "",
       industry: "",
       status: STATUS_OPTIONS[0].value,
-      website: "",
+      website_url: "",
       notes: "",
       ...defaultValues,
     },
@@ -81,13 +81,13 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
             </FormControl>
             <FormControl
               title="Webサイト"
-              errorMessages={errors.website?.message}
+              errorMessages={errors.website_url?.message}
               autoBindErrorInput
             >
               <Controller
-                name="website"
+                name="website_url"
                 control={control}
-                rules={VALIDATION_RULES.website}
+                rules={VALIDATION_RULES.website_url}
                 render={({ field }) => <FormInput field={field} />}
               />
             </FormControl>

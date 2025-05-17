@@ -76,7 +76,7 @@ export default function EditCompanyPage() {
             name: company.name,
             industry: company.industry || "",
             status: company.status,
-            website: company.website_url || "",
+            website_url: company.website_url || "",
             notes: company.notes || "",
           }}
         />

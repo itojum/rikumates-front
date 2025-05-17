@@ -44,7 +44,7 @@ export default function NewCompanyPage() {
             name: "",
             industry: "",
             status: "エントリー前",
-            website: "",
+            website_url: "",
             notes: "",
           }}
         />

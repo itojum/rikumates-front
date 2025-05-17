@@ -5,7 +5,7 @@ export type BasicInfoFormValues = {
   name: string
   industry: string
   status: string
-  website?: string
+  website_url?: string
   notes?: string
 }
 
@@ -41,7 +41,7 @@ export const VALIDATION_RULES = {
   status: {
     required: "選考状況は必須です",
   },
-  website: {
+  website_url: {
     pattern: {
       value: /^https?:\/\/.+/,
       message: "有効なURLを入力してください",
