@@ -13,4 +13,4 @@ export const FormSelect: FC<FieldProps<"status">> = ({ field }) => (
     options={STATUS_OPTIONS}
     onChange={(v) => field.onChange(v)}
   />
-) 
+)

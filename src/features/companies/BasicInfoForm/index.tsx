@@ -11,7 +11,11 @@ import { FormSelect } from "./components/FormSelect"
 import { FormTextarea } from "./components/FormTextarea"
 
 export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<BasicInfoFormValues>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BasicInfoFormValues>({
     defaultValues: {
       name: "",
       industry: "",
@@ -65,11 +69,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
               render={({ field }) => <FormSelect field={field} />}
             />
           </FormControl>
-          <FormControl
-            title="Webサイト"
-            errorMessages={errors.website?.message}
-            autoBindErrorInput
-          >
+          <FormControl title="Webサイト" errorMessages={errors.website?.message} autoBindErrorInput>
             <Controller
               name="website"
               control={control}
@@ -78,11 +78,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
             />
           </FormControl>
 
-          <FormControl
-            title="メモ"
-            errorMessages={errors.notes?.message}
-            autoBindErrorInput
-          >
+          <FormControl title="メモ" errorMessages={errors.notes?.message} autoBindErrorInput>
             <Controller
               name="notes"
               control={control}
@@ -94,4 +90,4 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ onSubmit, defaultValues 
       </form>
     </FormSection>
   )
-} 
+}

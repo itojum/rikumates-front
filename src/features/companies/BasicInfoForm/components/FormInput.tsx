@@ -10,9 +10,5 @@ const Input = styled(InputBase)`
 `
 
 export const FormInput: FC<FieldProps<"name" | "industry" | "website">> = ({ field }) => (
-  <Input
-    {...field}
-    width={field.name === "industry" ? 200 : 600}
-    onChange={(e) => field.onChange(e.target.value)}
-  />
-) 
+  <Input {...field} width={field.name === "industry" ? 200 : 600} onChange={(e) => field.onChange(e.target.value)} />
+)

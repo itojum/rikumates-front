@@ -1,27 +1,27 @@
-import { FC, ReactNode } from "react";
-import { ControllerRenderProps } from "react-hook-form";
+import { ReactNode } from "react"
+import { ControllerRenderProps } from "react-hook-form"
 
 export type BasicInfoFormValues = {
-  name: string;
-  industry: string;
-  status: string;
-  website?: string;
-  notes?: string;
-};
+  name: string
+  industry: string
+  status: string
+  website?: string
+  notes?: string
+}
 
 export type BasicInfoFormProps = {
-  onSubmit: (data: BasicInfoFormValues) => void;
-  defaultValues?: Partial<BasicInfoFormValues>;
-};
+  onSubmit: (data: BasicInfoFormValues) => void
+  defaultValues?: Partial<BasicInfoFormValues>
+}
 
 export type FieldProps<T extends keyof BasicInfoFormValues> = {
-  field: ControllerRenderProps<BasicInfoFormValues, T>;
-};
+  field: ControllerRenderProps<BasicInfoFormValues, T>
+}
 
 export type FormSectionProps = {
-  children: ReactNode;
-  title: string;
-};
+  children: ReactNode
+  title: string
+}
 
 export const VALIDATION_RULES = {
   name: {
@@ -57,4 +57,4 @@ export const VALIDATION_RULES = {
       message: "メモは1000文字以内で入力してください",
     },
   },
-} as const;
+} as const
