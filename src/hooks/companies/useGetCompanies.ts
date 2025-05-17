@@ -14,6 +14,7 @@ export const useGetCompanies = () => {
   const sort = searchParams.get("sort") || "created_at"
   const order = searchParams.get("order") || "desc"
   const recruitmentStatus = searchParams.get("recruitment_status")
+  const location = searchParams.get("location")
 
   const query = new URLSearchParams({
     page,
@@ -24,6 +25,10 @@ export const useGetCompanies = () => {
 
   if (recruitmentStatus && recruitmentStatus !== "all") {
     query.append("recruitment_status", recruitmentStatus)
+  }
+
+  if (location && location !== "すべて") {
+    query.append("location", location)
   }
 
   return useQuery<CompaniesResponse>({

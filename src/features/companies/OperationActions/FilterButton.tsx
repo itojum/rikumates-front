@@ -1,8 +1,9 @@
-import { Button, Select, FaFilterIcon, Heading } from "smarthr-ui"
+import { Button, Select, FaFilterIcon, Heading, SingleCombobox } from "smarthr-ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import styled from "styled-components"
 import { DropdownWithFloatArea } from "@/components/dropdown-with-float-area"
+import { prefectures } from "@/constants/prefectures"
 
 const recruitmentStatusOptions = [
   { label: "すべて", value: "all" },
@@ -12,14 +13,23 @@ const recruitmentStatusOptions = [
   { label: "お見送り", value: "お見送り" },
 ]
 
+const locationOptions = [
+  { label: "すべて", value: "すべて" },
+  ...Object.values(prefectures).map((prefecture) => ({
+    label: prefecture.value,
+    value: prefecture.value,
+  })),
+]
+
 export const FilterButton = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentRecruitmentStatus = searchParams.get("recruitment_status") || "all"
-
+  const currentLocation = searchParams.get("location") || "すべて"
+  
   const [tempRecruitmentStatus, setTempRecruitmentStatus] = useState(currentRecruitmentStatus)
-
+  const [tempLocation, setTempLocation] = useState(currentLocation)
   const handleApply = () => {
     const params = new URLSearchParams(searchParams.toString())
     if (tempRecruitmentStatus === "all") {
@@ -28,12 +38,19 @@ export const FilterButton = () => {
       params.set("recruitment_status", tempRecruitmentStatus)
     }
 
+    if (tempLocation === "all") {
+      params.delete("location")
+    } else {
+      params.set("location", tempLocation)
+    }
+
     params.set("page", "1")
     router.push(`${pathname}?${params.toString()}`)
   }
 
   const handleCancel = () => {
     setTempRecruitmentStatus(currentRecruitmentStatus)
+    setTempLocation(currentLocation)
   }
 
   return (
@@ -53,7 +70,19 @@ export const FilterButton = () => {
           value={tempRecruitmentStatus}
           onChange={(e) => setTempRecruitmentStatus(e.target.value)}
           width="300px"
-          style={{ margin: "16px 0" }}
+        />
+      </Container>
+      <Container>
+        <Heading type="blockTitle">場所</Heading>
+        <SingleCombobox
+          items={locationOptions}
+          selectedItem={{ label: tempLocation, value: tempLocation }}
+          onSelect={(item) => setTempLocation(item.value)}
+          onClear={() => setTempLocation("")}
+          width="300px"
+          decorators={{
+            noResultText: () => "一致する選択肢がありません。"
+          }}
         />
       </Container>
     </DropdownWithFloatArea>
