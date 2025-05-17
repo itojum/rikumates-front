@@ -34,8 +34,8 @@ export const VALIDATION_RULES = {
   },
   notes: {
     maxLength: {
-      value: 1000,
-      message: "メモは1000文字以内で入力してください",
+      value: 500,
+      message: "メモは500文字以内で入力してください",
     },
   },
 }
@@ -50,7 +50,7 @@ export const companySchema = z.object({
     .regex(/^https?:\/\/.+/, VALIDATION_RULES.website_url.pattern.message)
     .optional()
     .or(z.literal("")),
-  notes: z.string().max(1000, VALIDATION_RULES.notes.maxLength.message).optional().or(z.literal("")),
+  notes: z.string().max(500, VALIDATION_RULES.notes.maxLength.message).optional().or(z.literal("")),
 })
 
 export type CompanyFormValues = z.infer<typeof companySchema>
