@@ -33,7 +33,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
         }
       }}
     >
-      <Stack>
+      <Stack style={{ marginBottom: "24px" }}>
         <FormSection title="基本情報">
           <Stack gap="M">
             <FormControl title="企業名" statusLabels={<RequiredLabel />} errorMessages={errors.name?.message}>
