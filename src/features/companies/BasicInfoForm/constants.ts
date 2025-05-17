@@ -8,7 +8,6 @@ export const STATUS_OPTIONS = [
   { label: "お見送り", value: "お見送り" },
 ]
 
-
 export const LOCATION_OPTIONS = Object.values(prefectures).map((prefecture) => ({
   label: prefecture.value,
   value: prefecture.value,

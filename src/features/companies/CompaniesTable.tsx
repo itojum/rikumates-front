@@ -65,30 +65,28 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
       <THead />
       <tbody>
         {companies.map((company) => (
-            <tr key={company.id}>
-              <Td>
-                <TextLink href={`/companies/${company.id}?${currentQuery}`} elementAs={Link}>
-                  {company.name}
+          <tr key={company.id}>
+            <Td>
+              <TextLink href={`/companies/${company.id}?${currentQuery}`} elementAs={Link}>
+                {company.name}
+              </TextLink>
+            </Td>
+            <Td>{company.industry}</Td>
+            <Td>
+              <StatusLabel>{company.status}</StatusLabel>
+            </Td>
+            <Td>{company.location && <Text>{company.location}</Text>}</Td>
+            <Td>{format(new Date(company.created_at), "yyyy/MM/dd")}</Td>
+            <Td>
+              {company.website_url && (
+                <TextLink href={company.website_url} target="_blank">
+                  リンク
                 </TextLink>
-              </Td>
-              <Td>{company.industry}</Td>
-              <Td>
-                <StatusLabel>{company.status}</StatusLabel>
-              </Td>
-              <Td>
-                {company.location && <Text>{company.location}</Text>}
-              </Td>
-              <Td>{format(new Date(company.created_at), "yyyy/MM/dd")}</Td>
-              <Td>
-                {company.website_url && (
-                  <TextLink href={company.website_url} target="_blank">
-                    リンク
-                  </TextLink>
-                )}
-                {!company.website_url && <Text>未設定</Text>}
-              </Td>
-            </tr>
-          ))}
+              )}
+              {!company.website_url && <Text>未設定</Text>}
+            </Td>
+          </tr>
+        ))}
       </tbody>
     </Table>
   )

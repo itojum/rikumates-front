@@ -16,9 +16,7 @@ export const FormCombox: FC<FormComboxProps> = ({ options, field, width }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
-    const matchingOption = options.find(
-      (option) => option.label.toLowerCase() === inputValue.toLowerCase()
-    )
+    const matchingOption = options.find((option) => option.label.toLowerCase() === inputValue.toLowerCase())
     if (matchingOption) {
       field.onChange(matchingOption.value)
     }
@@ -33,7 +31,7 @@ export const FormCombox: FC<FormComboxProps> = ({ options, field, width }) => {
       onClear={() => field.onChange("")}
       width={width}
       decorators={{
-        noResultText: () => "一致する選択肢がありません。"
+        noResultText: () => "一致する選択肢がありません。",
       }}
     />
   )

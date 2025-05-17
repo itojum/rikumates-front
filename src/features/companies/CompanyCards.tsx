@@ -57,9 +57,7 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
 
           <div style={{ margin: "16px 0" }}>
             <DefinitionList>
-            <DefinitionListItem term="場所">
-                {company.location}
-              </DefinitionListItem>
+              <DefinitionListItem term="場所">{company.location}</DefinitionListItem>
               <DefinitionListItem term="作成日">
                 {format(new Date(company.created_at), "yyyy/MM/dd")}
               </DefinitionListItem>

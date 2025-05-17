@@ -49,11 +49,19 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
             </FormControl>
 
             <FormControl title="選考状況" statusLabels={<RequiredLabel />} errorMessages={errors.status?.message}>
-              <Controller name="status" control={control} render={({ field }) => <FormSelect field={field} width={200} options={STATUS_OPTIONS} />} />
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => <FormSelect field={field} width={200} options={STATUS_OPTIONS} />}
+              />
             </FormControl>
 
             <FormControl title="場所" errorMessages={errors.location?.message}>
-              <Controller name="location" control={control} render={({ field }) => <FormCombox field={field} width={200} options={LOCATION_OPTIONS} />} />
+              <Controller
+                name="location"
+                control={control}
+                render={({ field }) => <FormCombox field={field} width={200} options={LOCATION_OPTIONS} />}
+              />
             </FormControl>
 
             <FormControl title="企業URL" errorMessages={errors.website_url?.message}>

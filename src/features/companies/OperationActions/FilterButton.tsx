@@ -27,7 +27,7 @@ export const FilterButton = () => {
   const searchParams = useSearchParams()
   const currentRecruitmentStatus = searchParams.get("recruitment_status") || "all"
   const currentLocation = searchParams.get("location") || "すべて"
-  
+
   const [tempRecruitmentStatus, setTempRecruitmentStatus] = useState(currentRecruitmentStatus)
   const [tempLocation, setTempLocation] = useState(currentLocation)
   const handleApply = () => {
@@ -81,7 +81,7 @@ export const FilterButton = () => {
           onClear={() => setTempLocation("")}
           width="300px"
           decorators={{
-            noResultText: () => "一致する選択肢がありません。"
+            noResultText: () => "一致する選択肢がありません。",
           }}
         />
       </Container>

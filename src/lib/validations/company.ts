@@ -23,7 +23,7 @@ export const VALIDATION_RULES = {
     required: "場所を選択してください",
     oneOf: {
       value: prefectures,
-      message: "リストから選択してください"
+      message: "リストから選択してください",
     },
   },
   website_url: {
