@@ -24,6 +24,12 @@ function CompaniesContent() {
     window.history.pushState(null, "", `?${params.toString()}`)
   }
 
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("page", page.toString())
+    window.history.pushState(null, "", `?${params.toString()}`)
+  }
+
   return (
     <main>
       <Cluster style={{ justifyContent: "space-between" }}>
@@ -64,11 +70,7 @@ function CompaniesContent() {
           current={currentPage}
           total={totalPages}
           padding={5}
-          hrefTemplate={(page) => {
-            const params = new URLSearchParams(searchParams.toString())
-            params.set("page", page.toString())
-            return `/companies?${params.toString()}`
-          }}
+          onClick={handlePageChange}
         />
       </Center>
     </main>
