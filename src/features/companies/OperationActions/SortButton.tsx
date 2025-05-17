@@ -5,9 +5,9 @@ import styled from "styled-components"
 import { DropdownWithFloatArea } from "@/components/dropdown-with-float-area"
 
 const sortFields = [
+  { label: "作成日", value: "created_at" },
   { label: "企業名", value: "name" },
   { label: "業種", value: "industry" },
-  { label: "作成日", value: "created_at" },
 ]
 
 export const SortButton = () => {
