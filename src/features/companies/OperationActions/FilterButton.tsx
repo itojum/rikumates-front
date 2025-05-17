@@ -12,7 +12,6 @@ const recruitmentStatusOptions = [
   { label: "お見送り", value: "お見送り" },
 ]
 
-
 export const FilterButton = () => {
   const router = useRouter()
   const pathname = usePathname()

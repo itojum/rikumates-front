@@ -1,7 +1,18 @@
 import { DetailCompany } from "@/types/types"
 import Link from "next/link"
 import { FC } from "react"
-import { Base, Button, Cluster, FaUpRightFromSquareIcon, Heading, Loader, StatusLabel, Text, DefinitionListItem, DefinitionList } from "smarthr-ui"
+import {
+  Base,
+  Button,
+  Cluster,
+  FaUpRightFromSquareIcon,
+  Heading,
+  Loader,
+  StatusLabel,
+  Text,
+  DefinitionListItem,
+  DefinitionList,
+} from "smarthr-ui"
 import styled from "styled-components"
 import { useSearchParams } from "next/navigation"
 import { format } from "date-fns"
@@ -29,7 +40,9 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
       {companies.map((company) => (
         <CompanyCard key={company.id}>
           <Cluster justify="space-between">
-            <Heading type="blockTitle" style={{ fontSize: "18px" }}>{company.name}</Heading>
+            <Heading type="blockTitle" style={{ fontSize: "18px" }}>
+              {company.name}
+            </Heading>
             <StatusLabel>{company.status}</StatusLabel>
           </Cluster>
           <Text color="TEXT_GREY">{company.industry}</Text>
@@ -38,8 +51,8 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
             <DefinitionList>
               <DefinitionListItem term="次回選考">
                 {company.events ? company.events[0].title : "未設定"}
-            </DefinitionListItem>
-            <DefinitionListItem term="作成日">
+              </DefinitionListItem>
+              <DefinitionListItem term="作成日">
                 {format(new Date(company.created_at), "yyyy/MM/dd")}
               </DefinitionListItem>
             </DefinitionList>

@@ -1,6 +1,19 @@
 "use client"
 
-import { Heading, Stack, Text, UpwardLink, Base, Cluster, Button, TextLink, FaPencilIcon, FaTrashIcon, ActionDialog, NotificationBar } from "smarthr-ui"
+import {
+  Heading,
+  Stack,
+  Text,
+  UpwardLink,
+  Base,
+  Cluster,
+  Button,
+  TextLink,
+  FaPencilIcon,
+  FaTrashIcon,
+  ActionDialog,
+  NotificationBar,
+} from "smarthr-ui"
 import { useGetCompany } from "@/hooks/companies/useGetCompany"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
@@ -31,7 +44,7 @@ export default function CompanyDetailPage() {
     } catch {
       setNotification({
         message: "企業の削除に失敗しました。",
-        type: "error"
+        type: "error",
       })
     }
   }
@@ -60,15 +73,25 @@ export default function CompanyDetailPage() {
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
-        <UpwardLink href={backLink} indent={2} elementAs={Link}>企業一覧へ戻る</UpwardLink>
+        <UpwardLink href={backLink} indent={2} elementAs={Link}>
+          企業一覧へ戻る
+        </UpwardLink>
       </Stack>
 
       <Stack gap="M">
         <Cluster justify="space-between">
           <Heading type="screenTitle">{company.name}</Heading>
           <Cluster gap="S">
-            <Button variant="secondary" prefix={<FaPencilIcon />} onClick={() => router.push(`/companies/${id}/edit${currentQuery ? `?${currentQuery}` : ""}`)}>編集</Button>
-            <Button variant="danger" prefix={<FaTrashIcon />} onClick={() => setIsDeleteDialogOpen(true)}>削除</Button>
+            <Button
+              variant="secondary"
+              prefix={<FaPencilIcon />}
+              onClick={() => router.push(`/companies/${id}/edit${currentQuery ? `?${currentQuery}` : ""}`)}
+            >
+              編集
+            </Button>
+            <Button variant="danger" prefix={<FaTrashIcon />} onClick={() => setIsDeleteDialogOpen(true)}>
+              削除
+            </Button>
           </Cluster>
         </Cluster>
 
@@ -98,7 +121,6 @@ export default function CompanyDetailPage() {
               <Text color="TEXT_GREY">メモ</Text>
               <Text>{company.notes}</Text>
             </Stack>
-
           </Stack>
         </Base>
       </Stack>
@@ -112,9 +134,7 @@ export default function CompanyDetailPage() {
         onClickClose={() => setIsDeleteDialogOpen(false)}
       >
         <Stack gap="S">
-          <Text>
-            以下の企業を削除しますか？　この操作は元に戻せません。
-          </Text>
+          <Text>以下の企業を削除しますか？　この操作は元に戻せません。</Text>
         </Stack>
       </ActionDialog>
 
@@ -127,4 +147,4 @@ export default function CompanyDetailPage() {
       )}
     </main>
   )
-} 
+}

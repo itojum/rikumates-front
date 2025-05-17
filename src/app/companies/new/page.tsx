@@ -23,7 +23,7 @@ export default function NewCompanyPage() {
     } catch {
       setNotification({
         message: "企業の追加に失敗しました",
-        type: "error"
+        type: "error",
       })
     }
   }
@@ -31,7 +31,9 @@ export default function NewCompanyPage() {
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
-        <UpwardLink href="/companies" indent={2} elementAs={Link}>企業一覧へ戻る</UpwardLink>
+        <UpwardLink href="/companies" indent={2} elementAs={Link}>
+          企業一覧へ戻る
+        </UpwardLink>
       </Stack>
 
       <Stack gap="M">

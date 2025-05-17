@@ -80,11 +80,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
               render={({ field }) => <FormSelect field={field} />}
             />
           </FormControl>
-          <FormControl
-            title="Webサイト"
-            errorMessages={errors.website_url?.message}
-            autoBindErrorInput
-          >
+          <FormControl title="Webサイト" errorMessages={errors.website_url?.message} autoBindErrorInput>
             <Controller
               name="website_url"
               control={control}
@@ -93,11 +89,7 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
             />
           </FormControl>
 
-          <FormControl
-            title="メモ"
-            errorMessages={errors.notes?.message}
-            autoBindErrorInput
-          >
+          <FormControl title="メモ" errorMessages={errors.notes?.message} autoBindErrorInput>
             <Controller
               name="notes"
               control={control}

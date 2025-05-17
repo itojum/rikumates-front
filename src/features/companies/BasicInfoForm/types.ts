@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { ControllerRenderProps } from "react-hook-form";
-import { z } from "zod";
+import { ReactNode } from "react"
+import { ControllerRenderProps } from "react-hook-form"
+import { z } from "zod"
 
 export const VALIDATION_RULES = {
   name: {
@@ -32,41 +32,32 @@ export const VALIDATION_RULES = {
       message: "メモは1000文字以内で入力してください",
     },
   },
-} as const;
+} as const
 
 export const schema = z.object({
-  name: z.string().min(1, VALIDATION_RULES.name.required).max(
-    255,
-    VALIDATION_RULES.name.maxLength.message,
-  ),
-  industry: z.string().min(1, VALIDATION_RULES.industry.required).max(
-    255,
-    VALIDATION_RULES.industry.maxLength.message,
-  ),
-  recruitment_status: z.string().min(
-    1,
-    VALIDATION_RULES.recruitment_status.required,
-  ),
-  website_url: z.string().regex(
-    /^https?:\/\/.+/,
-    VALIDATION_RULES.website_url.pattern.message,
-  ).optional().or(z.literal("")),
-  notes: z.string().max(1000, VALIDATION_RULES.notes.maxLength.message)
-    .optional().or(z.literal("")),
-});
+  name: z.string().min(1, VALIDATION_RULES.name.required).max(255, VALIDATION_RULES.name.maxLength.message),
+  industry: z.string().min(1, VALIDATION_RULES.industry.required).max(255, VALIDATION_RULES.industry.maxLength.message),
+  recruitment_status: z.string().min(1, VALIDATION_RULES.recruitment_status.required),
+  website_url: z
+    .string()
+    .regex(/^https?:\/\/.+/, VALIDATION_RULES.website_url.pattern.message)
+    .optional()
+    .or(z.literal("")),
+  notes: z.string().max(1000, VALIDATION_RULES.notes.maxLength.message).optional().or(z.literal("")),
+})
 
-export type BasicInfoFormValues = z.infer<typeof schema>;
+export type BasicInfoFormValues = z.infer<typeof schema>
 
 export interface BasicInfoFormProps {
-  defaultValues?: Partial<BasicInfoFormValues>;
-  onSubmit: (data: BasicInfoFormValues) => void;
+  defaultValues?: Partial<BasicInfoFormValues>
+  onSubmit: (data: BasicInfoFormValues) => void
 }
 
 export type FieldProps<T extends keyof BasicInfoFormValues> = {
-  field: ControllerRenderProps<BasicInfoFormValues, T>;
-};
+  field: ControllerRenderProps<BasicInfoFormValues, T>
+}
 
 export type FormSectionProps = {
-  children: ReactNode;
-  title: string;
-};
+  children: ReactNode
+  title: string
+}

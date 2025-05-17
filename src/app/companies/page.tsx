@@ -49,29 +49,16 @@ function CompaniesContent() {
         <OperationArea currentStatus={currentStatus} setCurrentStatus={handleStatusChange} />
 
         {currentStatus === "table" && (
-          <CompaniesTable
-            companies={companies}
-            loading={isLoading}
-            error={error ? error.message : null}
-          />
+          <CompaniesTable companies={companies} loading={isLoading} error={error ? error.message : null} />
         )}
 
         {currentStatus === "card" && (
-          <CompanyCards
-            companies={companies}
-            loading={isLoading}
-            error={error ? error.message : null}
-          />
+          <CompanyCards companies={companies} loading={isLoading} error={error ? error.message : null} />
         )}
       </Base>
 
       <Center>
-        <Pagination
-          current={currentPage}
-          total={totalPages}
-          padding={5}
-          onClick={handlePageChange}
-        />
+        <Pagination current={currentPage} total={totalPages} padding={5} onClick={handlePageChange} />
       </Center>
     </main>
   )

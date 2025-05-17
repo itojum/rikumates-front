@@ -35,7 +35,7 @@ export default function EditCompanyPage() {
     } catch {
       setNotification({
         message: "企業情報の更新に失敗しました",
-        type: "error"
+        type: "error",
       })
     }
   }
@@ -64,7 +64,9 @@ export default function EditCompanyPage() {
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
-        <UpwardLink href={backLink} indent={2} elementAs={Link}>企業詳細へ戻る</UpwardLink>
+        <UpwardLink href={backLink} indent={2} elementAs={Link}>
+          企業詳細へ戻る
+        </UpwardLink>
       </Stack>
 
       <Stack gap="M">
@@ -89,11 +91,7 @@ export default function EditCompanyPage() {
             更新
           </Button>
         }
-        secondaryButton={
-          <Button onClick={() => router.push(backLink)}>
-            キャンセル
-          </Button>
-        }
+        secondaryButton={<Button onClick={() => router.push(backLink)}>キャンセル</Button>}
         bottom="M"
       />
 
@@ -106,4 +104,4 @@ export default function EditCompanyPage() {
       )}
     </main>
   )
-} 
+}
