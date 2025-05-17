@@ -51,7 +51,6 @@ export default function CompanyDetailPage() {
       </main>
     )
   }
-  console.log(company)
 
   return (
     <main>
