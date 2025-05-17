@@ -2,6 +2,7 @@ import { DetailCompany } from "@/types/types"
 import { FC } from "react"
 import { Loader, StatusLabel, Table, Td, Text, TextLink, Th } from "smarthr-ui"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
 type Props = {
   companies: DetailCompany[]
@@ -53,7 +54,7 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
           companies.map((company) => (
             <tr key={company.id}>
               <Td>
-                <TextLink href={`/companies/${company.id}?${currentQuery}`}>{company.name}</TextLink>
+                <TextLink href={`/companies/${company.id}?${currentQuery}`} elementAs={Link}>{company.name}</TextLink>
               </Td>
               <Td>{company.industry}</Td>
               <Td>

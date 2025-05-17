@@ -7,6 +7,7 @@ import { useGetCompany } from "@/hooks/companies/useGetCompany"
 import { usePutCompany } from "@/hooks/companies/usePutCompany"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
+import Link from "next/link"
 
 export default function EditCompanyPage() {
   const params = useParams()
@@ -62,7 +63,7 @@ export default function EditCompanyPage() {
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
-        <UpwardLink href={backLink} indent={2}>企業詳細へ戻る</UpwardLink>
+        <UpwardLink href={backLink} indent={2} elementAs={Link}>企業詳細へ戻る</UpwardLink>
       </Stack>
 
       <Stack gap="M">
