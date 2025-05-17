@@ -20,15 +20,15 @@ export const DropdownWithFloatArea = ({
 }: Props) => {
   return (
     <Dropdown>
-      <DropdownTrigger>
-        {trigger}
-      </DropdownTrigger>
+      <DropdownTrigger>{trigger}</DropdownTrigger>
       <DropdownContent controllable>
         {children}
         <FloatArea
           primaryButton={
             <DropdownCloser>
-              <Button variant="primary" onClick={onApply}>{applyText}</Button>
+              <Button variant="primary" onClick={onApply}>
+                {applyText}
+              </Button>
             </DropdownCloser>
           }
           secondaryButton={
@@ -41,4 +41,4 @@ export const DropdownWithFloatArea = ({
       </DropdownContent>
     </Dropdown>
   )
-} 
+}

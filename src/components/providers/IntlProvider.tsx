@@ -19,4 +19,4 @@ export const IntlProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </ReactIntlProvider>
   )
-} 
+}

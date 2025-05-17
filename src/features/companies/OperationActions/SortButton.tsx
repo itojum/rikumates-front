@@ -34,7 +34,7 @@ export const SortButton = () => {
   }
 
   const getSortLabel = () => {
-    const field = sortFields.find(f => f.value === currentSort)
+    const field = sortFields.find((f) => f.value === currentSort)
     const orderLabel = currentOrder === "asc" ? "昇順" : "降順"
     return `${field?.label}(${orderLabel})`
   }
@@ -65,20 +65,10 @@ export const SortButton = () => {
 
         <Heading type="blockTitle">並び順</Heading>
         <RadioGroup>
-          <RadioButton
-            name="order"
-            value="asc"
-            checked={tempOrder === "asc"}
-            onChange={() => setTempOrder("asc")}
-          >
+          <RadioButton name="order" value="asc" checked={tempOrder === "asc"} onChange={() => setTempOrder("asc")}>
             昇順
           </RadioButton>
-          <RadioButton
-            name="order"
-            value="desc"
-            checked={tempOrder === "desc"}
-            onChange={() => setTempOrder("desc")}
-          >
+          <RadioButton name="order" value="desc" checked={tempOrder === "desc"} onChange={() => setTempOrder("desc")}>
             降順
           </RadioButton>
         </RadioGroup>

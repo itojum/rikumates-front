@@ -1,3 +1,3 @@
-import { fakerJA } from '@faker-js/faker'
+import { fakerJA } from "@faker-js/faker"
 
 export const faker = fakerJA

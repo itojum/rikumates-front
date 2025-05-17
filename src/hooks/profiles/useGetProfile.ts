@@ -1,26 +1,26 @@
-import { Profile } from "@/types/database";
-import { useEffect, useState } from "react";
+import { Profile } from "@/types/database"
+import { useEffect, useState } from "react"
 
 export const useGetProfile = (userId: string) => {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (userId) {
         try {
-          const response = await fetch(`/api/v1/profiles/${userId}`);
-          const data = await response.json();
-          setProfile(data);
+          const response = await fetch(`/api/v1/profiles/${userId}`)
+          const data = await response.json()
+          setProfile(data)
         } catch (error) {
-          console.error("プロフィールの取得に失敗しました:", error);
+          console.error("プロフィールの取得に失敗しました:", error)
         } finally {
-          setLoading(false);
+          setLoading(false)
         }
       }
-    };
-    fetchProfile();
-  }, [userId]);
+    }
+    fetchProfile()
+  }, [userId])
 
-  return { profile, loading };
-};
+  return { profile, loading }
+}

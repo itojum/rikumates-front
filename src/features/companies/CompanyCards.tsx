@@ -11,8 +11,6 @@ type Props = {
 }
 
 export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
-
-
   if (loading) {
     return <Loader />
   }
@@ -33,18 +31,28 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
           <table>
             <tbody>
               <tr>
-                <Td><Text color="TEXT_GREY" size="S">次回選考</Text></Td>
-                <Td>{company.events[0] ? company.events[0].title : '未設定'}</Td>
+                <Td>
+                  <Text color="TEXT_GREY" size="S">
+                    次回選考
+                  </Text>
+                </Td>
+                <Td>{company.events[0] ? company.events[0].title : "未設定"}</Td>
               </tr>
               <tr>
-                <Td><Text color="TEXT_GREY" size="S">次回選考日時</Text></Td>
-                <Td>{company.events[0] ? company.events[0].scheduled_at : '未設定'}</Td>
+                <Td>
+                  <Text color="TEXT_GREY" size="S">
+                    次回選考日時
+                  </Text>
+                </Td>
+                <Td>{company.events[0] ? company.events[0].scheduled_at : "未設定"}</Td>
               </tr>
             </tbody>
           </table>
           <Cluster justify="space-between">
             <Button disabled={!company.website_url} variant="secondary" prefix={<FaUpRightFromSquareIcon />}>
-              <Link href={company.website_url || ''} target="_blank">ウェブサイト</Link>
+              <Link href={company.website_url || ""} target="_blank">
+                ウェブサイト
+              </Link>
             </Button>
 
             <Button variant="secondary">

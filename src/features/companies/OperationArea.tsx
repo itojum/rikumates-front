@@ -10,7 +10,7 @@ type Props = {
 
 export const OperationArea = ({ currentStatus, setCurrentStatus }: Props) => {
   return (
-    <Stack style={{ padding: '24px' }}>
+    <Stack style={{ padding: "24px" }}>
       <Cluster>
         <SearchForm />
         <SortButton />
@@ -19,8 +19,8 @@ export const OperationArea = ({ currentStatus, setCurrentStatus }: Props) => {
 
       <SegmentedControl
         options={[
-          { content: 'テーブル表示', value: 'table' },
-          { content: 'カード表示', value: 'card' },
+          { content: "テーブル表示", value: "table" },
+          { content: "カード表示", value: "card" },
         ]}
         value={currentStatus}
         onClickOption={(value) => setCurrentStatus(value)}

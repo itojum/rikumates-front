@@ -20,17 +20,21 @@ export const SearchForm = () => {
     params.set("page", "1") // 検索時は1ページ目に戻す
     router.push(`${pathname}?${params.toString()}`)
   }
-  
+
   return (
-    <Form onSubmit={handleSubmit} >
+    <Form onSubmit={handleSubmit}>
       <SearchInput
-          tooltipMessage="企業名、業種で検索"
-          value={query}
-          onChange={(e) => { setQuery(e.target.value) }}
-          size={30}
-          style={{ height: '100%' }}
-        />
-      <Button variant="secondary" type="submit">検索</Button>
+        tooltipMessage="企業名、業種で検索"
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value)
+        }}
+        size={30}
+        style={{ height: "100%" }}
+      />
+      <Button variant="secondary" type="submit">
+        検索
+      </Button>
     </Form>
   )
 }
