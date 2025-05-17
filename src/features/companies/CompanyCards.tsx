@@ -59,15 +59,15 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
           </div>
 
           <Cluster justify="space-between">
-            <Button disabled={!company.website_url} variant="secondary" prefix={<FaUpRightFromSquareIcon />}>
-              <Link href={company.website_url || ""} target="_blank">
+            <Link href={company.website_url || ""} target="_blank">
+              <Button disabled={!company.website_url} variant="secondary" prefix={<FaUpRightFromSquareIcon />}>
                 ウェブサイト
-              </Link>
-            </Button>
+              </Button>
+            </Link>
 
-            <Button variant="secondary">
-              <Link href={`/companies/${company.id}?${currentQuery}`}>詳細を見る</Link>
-            </Button>
+            <Link href={`/companies/${company.id}?${currentQuery}`}>
+              <Button variant="secondary">詳細を見る</Button>
+            </Link>
           </Cluster>
         </CompanyCard>
       ))}
