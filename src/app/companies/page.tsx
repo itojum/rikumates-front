@@ -30,9 +30,11 @@ function CompaniesContent() {
           <Text color="TEXT_GREY">就職活動中の企業情報を管理します</Text>
         </div>
 
-        <Button prefix={<FaCirclePlusIcon />} variant="primary">
-          <Link href="/companies/new">新規企業を追加</Link>
-        </Button>
+        <Link href="/companies/new">
+          <Button prefix={<FaCirclePlusIcon />} variant="primary">
+            新規企業を追加
+          </Button>
+        </Link>
       </Cluster>
 
       <Base style={{ marginTop: 20 }}>
