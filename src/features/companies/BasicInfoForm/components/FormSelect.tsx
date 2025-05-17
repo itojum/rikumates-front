@@ -12,12 +12,5 @@ interface FormSelectProps {
 }
 
 export const FormSelect: FC<FormSelectProps> = ({ field, width }) => {
-  return (
-    <Select
-      options={STATUS_OPTIONS}
-      value={field.value}
-      onChange={field.onChange}
-      width={width}
-    />
-  )
+  return <Select options={STATUS_OPTIONS} value={field.value} onChange={field.onChange} width={width} />
 }

@@ -22,80 +22,44 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
   })
 
   return (
-    <form id="company-form" onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault()
-      }
-    }}>
+    <form
+      id="company-form"
+      onSubmit={handleSubmit(onSubmit)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault()
+        }
+      }}
+    >
       <Stack>
         <FormSection title="基本情報">
           <Stack gap="M">
-            <FormControl
-              title="企業名"
-              statusLabels={<RequiredLabel />}
-              errorMessages={errors.name?.message}
-            >
+            <FormControl title="企業名" statusLabels={<RequiredLabel />} errorMessages={errors.name?.message}>
               <Controller
                 name="name"
                 control={control}
-                render={({ field }) => (
-                  <FormInput field={field} width={400} />
-                )}
+                render={({ field }) => <FormInput field={field} width={400} />}
               />
             </FormControl>
 
-            <FormControl
-              title="業種"
-              statusLabels={<RequiredLabel />}
-              errorMessages={errors.industry?.message}
-            >
-              <Controller
-                name="industry"
-                control={control}
-                render={({ field }) => (
-                  <FormInput field={field} />
-                )}
-              />
+            <FormControl title="業種" statusLabels={<RequiredLabel />} errorMessages={errors.industry?.message}>
+              <Controller name="industry" control={control} render={({ field }) => <FormInput field={field} />} />
             </FormControl>
 
-            <FormControl
-              title="選考状況"
-              statusLabels={<RequiredLabel />}
-              errorMessages={errors.status?.message}
-            >
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <FormSelect field={field} />
-                )}
-              />
+            <FormControl title="選考状況" statusLabels={<RequiredLabel />} errorMessages={errors.status?.message}>
+              <Controller name="status" control={control} render={({ field }) => <FormSelect field={field} />} />
             </FormControl>
 
-            <FormControl
-              title="企業URL"
-              errorMessages={errors.website_url?.message}
-            >
+            <FormControl title="企業URL" errorMessages={errors.website_url?.message}>
               <Controller
                 name="website_url"
                 control={control}
-                render={({ field }) => (
-                  <FormInput field={field} width={600} />
-                )}
+                render={({ field }) => <FormInput field={field} width={600} />}
               />
             </FormControl>
 
-            <FormControl
-              title="メモ"
-              errorMessages={errors.notes?.message}
-            >
-              <Controller
-                name="notes"
-                control={control}
-                render={({ field }) => (
-                  <FormTextarea field={field} />
-                )}
-              />
+            <FormControl title="メモ" errorMessages={errors.notes?.message}>
+              <Controller name="notes" control={control} render={({ field }) => <FormTextarea field={field} />} />
             </FormControl>
           </Stack>
         </FormSection>

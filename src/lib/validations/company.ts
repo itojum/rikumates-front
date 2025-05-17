@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const VALIDATION_RULES = {
   name: {
@@ -30,24 +30,18 @@ export const VALIDATION_RULES = {
       message: "メモは1000文字以内で入力してください",
     },
   },
-};
+}
 
 export const companySchema = z.object({
-  name: z.string().min(1, VALIDATION_RULES.name.required).max(
-    255,
-    VALIDATION_RULES.name.maxLength.message,
-  ),
-  industry: z.string().min(1, VALIDATION_RULES.industry.required).max(
-    255,
-    VALIDATION_RULES.industry.maxLength.message,
-  ),
+  name: z.string().min(1, VALIDATION_RULES.name.required).max(255, VALIDATION_RULES.name.maxLength.message),
+  industry: z.string().min(1, VALIDATION_RULES.industry.required).max(255, VALIDATION_RULES.industry.maxLength.message),
   status: z.string().min(1, VALIDATION_RULES.status.required),
-  website_url: z.string().regex(
-    /^https?:\/\/.+/,
-    VALIDATION_RULES.website_url.pattern.message,
-  ).optional().or(z.literal("")),
-  notes: z.string().max(1000, VALIDATION_RULES.notes.maxLength.message)
-    .optional().or(z.literal("")),
-});
+  website_url: z
+    .string()
+    .regex(/^https?:\/\/.+/, VALIDATION_RULES.website_url.pattern.message)
+    .optional()
+    .or(z.literal("")),
+  notes: z.string().max(1000, VALIDATION_RULES.notes.maxLength.message).optional().or(z.literal("")),
+})
 
-export type CompanyFormValues = z.infer<typeof companySchema>;
+export type CompanyFormValues = z.infer<typeof companySchema>

@@ -72,7 +72,7 @@ export default function CompanyDetailPage() {
       </main>
     )
   }
-  
+
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>
@@ -107,13 +107,8 @@ export default function CompanyDetailPage() {
               {company.status}
             </DefinitionListItem>
 
-            <DefinitionListItem term="作成日">
-              {format(new Date(company.created_at), "yyyy/MM/dd")}
-            </DefinitionListItem>
-            <DefinitionListItem term="更新日">
-              {format(new Date(company.updated_at), "yyyy/MM/dd")}
-            </DefinitionListItem>
-
+            <DefinitionListItem term="作成日">{format(new Date(company.created_at), "yyyy/MM/dd")}</DefinitionListItem>
+            <DefinitionListItem term="更新日">{format(new Date(company.updated_at), "yyyy/MM/dd")}</DefinitionListItem>
 
             <DefinitionListItem term="Webサイト" fullWidth>
               {company.website_url && (

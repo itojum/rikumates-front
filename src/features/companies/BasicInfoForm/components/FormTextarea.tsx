@@ -10,9 +10,5 @@ interface FormTextareaProps {
 }
 
 export const FormTextarea: FC<FormTextareaProps> = ({ field }) => (
-  <Textarea
-    value={field.value}
-    onChange={field.onChange}
-    width="100%"
-  />
+  <Textarea value={field.value} onChange={field.onChange} width="100%" />
 )
