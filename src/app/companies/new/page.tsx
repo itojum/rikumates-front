@@ -18,8 +18,8 @@ export default function NewCompanyPage() {
 
   const handleSubmit = async (data: BasicInfoFormValues) => {
     try {
-      await postCompany(data)
-      router.push("/companies")
+      const response = await postCompany(data)
+      router.push(`/companies/${response.id}`)
     } catch {
       setNotification({
         message: "企業の追加に失敗しました",

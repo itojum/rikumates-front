@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       user_id: user.user?.id,
     }
 
-    const { data, error } = await supabase.from("companies").upsert(insertData).select();
+    const { data, error } = await supabase.from("companies").upsert(insertData).select().single();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
