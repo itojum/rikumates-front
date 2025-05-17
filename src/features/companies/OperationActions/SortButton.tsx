@@ -7,15 +7,15 @@ import { DropdownWithFloatArea } from "@/components/dropdown-with-float-area"
 const sortFields = [
   { label: "企業名", value: "name" },
   { label: "業種", value: "industry" },
-  { label: "次回選考日時", value: "next_event_date" },
+  { label: "作成日", value: "created_at" },
 ]
 
 export const SortButton = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const currentSort = searchParams.get("sort") || "name"
-  const currentOrder = searchParams.get("order") || "asc"
+  const currentSort = searchParams.get("sort") || "created_at"
+  const currentOrder = searchParams.get("order") || "desc"
 
   const [tempSort, setTempSort] = useState(currentSort)
   const [tempOrder, setTempOrder] = useState<"asc" | "desc">(currentOrder as "asc" | "desc")

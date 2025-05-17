@@ -12,22 +12,14 @@ const recruitmentStatusOptions = [
   { label: "お見送り", value: "お見送り" },
 ]
 
-const nextEventOptions = [
-  { label: "すべて", value: "all" },
-  { label: "1週間以内", value: "within_week" },
-  { label: "2週間以内", value: "within_two_weeks" },
-  { label: "1ヶ月以内", value: "within_month" },
-]
 
 export const FilterButton = () => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentRecruitmentStatus = searchParams.get("recruitment_status") || "all"
-  const currentNextEvent = searchParams.get("next_event") || "all"
 
   const [tempRecruitmentStatus, setTempRecruitmentStatus] = useState(currentRecruitmentStatus)
-  const [tempNextEvent, setTempNextEvent] = useState(currentNextEvent)
 
   const handleApply = () => {
     const params = new URLSearchParams(searchParams.toString())
@@ -36,18 +28,13 @@ export const FilterButton = () => {
     } else {
       params.set("recruitment_status", tempRecruitmentStatus)
     }
-    if (tempNextEvent === "all") {
-      params.delete("next_event")
-    } else {
-      params.set("next_event", tempNextEvent)
-    }
+
     params.set("page", "1")
     router.push(`${pathname}?${params.toString()}`)
   }
 
   const handleCancel = () => {
     setTempRecruitmentStatus(currentRecruitmentStatus)
-    setTempNextEvent(currentNextEvent)
   }
 
   return (
@@ -66,15 +53,6 @@ export const FilterButton = () => {
           options={recruitmentStatusOptions}
           value={tempRecruitmentStatus}
           onChange={(e) => setTempRecruitmentStatus(e.target.value)}
-          width="300px"
-          style={{ margin: "16px 0" }}
-        />
-
-        <Heading type="blockTitle">次回選考</Heading>
-        <Select
-          options={nextEventOptions}
-          value={tempNextEvent}
-          onChange={(e) => setTempNextEvent(e.target.value)}
           width="300px"
           style={{ margin: "16px 0" }}
         />

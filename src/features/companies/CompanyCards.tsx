@@ -1,9 +1,10 @@
 import { DetailCompany } from "@/types/types"
 import Link from "next/link"
 import { FC } from "react"
-import { Base, Button, Cluster, FaUpRightFromSquareIcon, Heading, Loader, StatusLabel, Td, Text } from "smarthr-ui"
+import { Base, Button, Cluster, FaUpRightFromSquareIcon, Heading, Loader, StatusLabel, Text, DefinitionListItem, DefinitionList } from "smarthr-ui"
 import styled from "styled-components"
 import { useSearchParams } from "next/navigation"
+import { format } from "date-fns"
 
 type Props = {
   companies: DetailCompany[]
@@ -32,26 +33,18 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
             <StatusLabel>{company.status}</StatusLabel>
           </Cluster>
           <Text color="TEXT_GREY">{company.industry}</Text>
-          <table>
-            <tbody>
-              <tr>
-                <Td>
-                  <Text color="TEXT_GREY" size="S">
-                    次回選考
-                  </Text>
-                </Td>
-                <Td>{company.events[0] ? company.events[0].title : "未設定"}</Td>
-              </tr>
-              <tr>
-                <Td>
-                  <Text color="TEXT_GREY" size="S">
-                    次回選考日時
-                  </Text>
-                </Td>
-                <Td>{company.events[0] ? company.events[0].scheduled_at : "未設定"}</Td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div style={{ margin: "16px 0" }}>
+            <DefinitionList>
+              <DefinitionListItem term="次回選考">
+                {company.events[0] ? company.events[0].title : "未設定"}
+            </DefinitionListItem>
+            <DefinitionListItem term="作成日">
+                {format(new Date(company.created_at), "yyyy/MM/dd")}
+              </DefinitionListItem>
+            </DefinitionList>
+          </div>
+
           <Cluster justify="space-between">
             <Button disabled={!company.website_url} variant="secondary" prefix={<FaUpRightFromSquareIcon />}>
               <Link href={company.website_url || ""} target="_blank">

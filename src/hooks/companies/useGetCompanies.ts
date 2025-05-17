@@ -9,51 +9,32 @@ interface CompaniesResponse {
 
 export const useGetCompanies = () => {
   const searchParams = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
-  const perPage = Number(searchParams.get("per_page")) || 10;
-  const sort = searchParams.get("sort") || "name";
-  const order = (searchParams.get("order") as "asc" | "desc") || "asc";
-  const recruitmentStatus = searchParams.get("recruitment_status") || "all";
-  const nextEvent = searchParams.get("next_event") || "all";
-  const query = searchParams.get("query") || "";
+  const page = searchParams.get("page") || "1";
+  const per_page = searchParams.get("per_page") || "10";
+  const sort = searchParams.get("sort") || "created_at";
+  const order = searchParams.get("order") || "desc";
+  const recruitmentStatus = searchParams.get("recruitment_status");
+
+  const query = new URLSearchParams({
+    page,
+    per_page,
+    sort,
+    order,
+  });
+
+  if (recruitmentStatus && recruitmentStatus !== "all") {
+    query.append("recruitment_status", recruitmentStatus);
+  }
 
   return useQuery<CompaniesResponse>({
-    queryKey: [
-      "companies",
-      {
-        page,
-        perPage,
-        sort,
-        order,
-        recruitmentStatus,
-        nextEvent,
-        query,
-      },
-    ],
+    queryKey: ["companies", query.toString()],
     queryFn: async () => {
-      const params = new URLSearchParams();
-      params.set("page", page.toString());
-      params.set("per_page", perPage.toString());
-      params.set("sort", sort);
-      params.set("order", order);
-      if (recruitmentStatus !== "all") {
-        params.set("recruitment_status", recruitmentStatus);
-      }
-      if (nextEvent !== "all") {
-        params.set("next_event", nextEvent);
-      }
-      if (query) {
-        params.set("query", query);
-      }
-
-      const response = await fetch(`/api/v1/companies?${params.toString()}`);
+      const response = await fetch(`/api/v1/companies?${query.toString()}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch companies");
+        throw new Error("企業一覧の取得に失敗しました");
       }
       return response.json();
     },
-    staleTime: 1000 * 60 * 5, // 5分間はデータを新鮮とみなす
-    gcTime: 1000 * 60 * 30, // 30分間キャッシュを保持
-    placeholderData: (previousData) => previousData, // 新しいデータを取得中も前のデータを表示
+    placeholderData: (previousData) => previousData,
   });
 };
