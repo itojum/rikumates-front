@@ -1,11 +1,12 @@
 "use client"
 
-import { Button, FloatArea, Heading, Stack, Text, UpwardLink } from "smarthr-ui"
-import { BasicInfoForm, BasicInfoFormValues } from "@/features/companies/BasicInfoForm"
+import { Heading, Stack, Text, UpwardLink, FloatArea, Button } from "smarthr-ui"
+import { BasicInfoForm } from "@/features/companies/BasicInfoForm"
+import { BasicInfoFormValues } from "@/features/companies/BasicInfoForm/types"
+import Link from "next/link"
 
 export default function NewCompanyPage() {
   const handleSubmit = (data: BasicInfoFormValues) => {
-    // その他の情報も含めてここでまとめて処理
     console.log("submit data", data)
   }
 
@@ -15,18 +16,34 @@ export default function NewCompanyPage() {
         <UpwardLink href="/companies" indent={2}>企業一覧へ戻る</UpwardLink>
       </Stack>
 
-      <Heading type="screenTitle">新規企業を追加</Heading>
-      <Text color="TEXT_GREY">企業情報を入力してください</Text>
+      <Stack gap="M">
+        <Heading type="screenTitle">新規企業を追加</Heading>
+        <Text color="TEXT_GREY">企業情報を入力してください</Text>
 
-      <BasicInfoForm onSubmit={handleSubmit} />
+        <BasicInfoForm
+          onSubmit={handleSubmit}
+          defaultValues={{
+            name: "",
+            industry: "",
+            status: "エントリー前",
+            website: "",
+            notes: "",
+          }}
+        />
+      </Stack>
 
       <FloatArea
         primaryButton={
-          <Button type="submit" form="company-form">追加</Button>
+          <Button type="submit" form="company-form" variant="primary">
+            追加
+          </Button>
         }
         secondaryButton={
-          <Button>キャンセル</Button>
+          <Link href="/companies">
+            <Button>キャンセル</Button>
+          </Link>
         }
+        bottom="M"
       />
     </main>
   )
