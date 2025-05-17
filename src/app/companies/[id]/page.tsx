@@ -66,7 +66,7 @@ export default function CompanyDetailPage() {
         <Cluster justify="space-between">
           <Heading type="screenTitle">{company.name}</Heading>
           <Cluster gap="S">
-            <Button variant="secondary" prefix={<FaPencilIcon />}>編集</Button>
+            <Button variant="secondary" prefix={<FaPencilIcon />} onClick={() => router.push(`/companies/${id}/edit${currentQuery ? `?${currentQuery}` : ""}`)}>編集</Button>
             <Button variant="danger" prefix={<FaTrashIcon />} onClick={() => setIsDeleteDialogOpen(true)}>削除</Button>
           </Cluster>
         </Cluster>

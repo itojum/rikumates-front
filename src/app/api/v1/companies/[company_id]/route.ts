@@ -50,7 +50,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
  */
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ company_id: string }> }) {
   // リクエストボディからデータを取得
-  const { name, industry, website_url } = await request.json()
+  const { name, industry, website_url, notes, status } = await request.json()
   const { company_id } = await params
 
   // バリデーションチェック
@@ -75,6 +75,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     name,
     industry,
     website_url,
+    notes,
+    status,
   }
 
   // データベースへの更新

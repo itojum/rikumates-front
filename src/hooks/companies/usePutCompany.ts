@@ -1,18 +1,35 @@
-import { CompanyUpdate } from "@/types/database"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { BasicInfoFormValues } from "@/features/companies/BasicInfoForm/types";
+
+interface PutCompanyParams extends BasicInfoFormValues {
+  id: string;
+}
 
 export const usePutCompany = () => {
-  const putCompany = async (company: CompanyUpdate) => {
-    const response = await fetch(`/api/v1/companies/${company.id}`, {
-      method: "PUT",
-      body: JSON.stringify(company),
+  const queryClient = useQueryClient();
 
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const { mutateAsync: putCompany } = useMutation({
+    mutationFn: async (params: PutCompanyParams) => {
+      const { id, ...data } = params;
+      const response = await fetch(`/api/v1/companies/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    return response.json()
-  }
+      if (!response.ok) {
+        throw new Error("企業情報の更新に失敗しました");
+      }
 
-  return { putCompany }
-}
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
+      queryClient.invalidateQueries({ queryKey: ["company"] });
+    },
+  });
+
+  return { putCompany };
+};
