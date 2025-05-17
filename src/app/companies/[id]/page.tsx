@@ -13,13 +13,15 @@ import {
   FaTrashIcon,
   ActionDialog,
   NotificationBar,
+  DefinitionListItem,
+  DefinitionList,
 } from "smarthr-ui"
 import { useGetCompany } from "@/hooks/companies/useGetCompany"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { useDeleteCompany } from "@/hooks/companies/useDeleteCompany"
 import Link from "next/link"
-
+import { format } from "date-fns"
 export default function CompanyDetailPage() {
   const params = useParams()
   const router = useRouter()
@@ -96,32 +98,34 @@ export default function CompanyDetailPage() {
         </Cluster>
 
         <Base padding="M">
-          <Stack gap="M">
-            <Stack>
-              <Text color="TEXT_GREY">業種</Text>
-              <Text>{company.industry}</Text>
-            </Stack>
+          <DefinitionList maxColumns={2}>
+            <DefinitionListItem term="業種" fullWidth>
+              {company.industry}
+            </DefinitionListItem>
+            <DefinitionListItem term="選考状況" fullWidth>
+              {company.status}
+            </DefinitionListItem>
 
-            <Stack gap="S">
-              <Text color="TEXT_GREY">選考状況</Text>
-              <Text>{company.status}</Text>
-            </Stack>
+            <DefinitionListItem term="作成日">
+              {format(new Date(company.created_at), "yyyy/MM/dd")}
+            </DefinitionListItem>
+            <DefinitionListItem term="更新日">
+              {format(new Date(company.updated_at), "yyyy/MM/dd")}
+            </DefinitionListItem>
 
-            <Stack gap="S">
-              <Text color="TEXT_GREY">Webサイト</Text>
+
+            <DefinitionListItem term="Webサイト" fullWidth>
               {company.website_url && (
                 <TextLink href={company.website_url} target="_blank" style={{ width: "fit-content" }}>
                   {company.website_url}
                 </TextLink>
               )}
               {!company.website_url && <Text>未設定</Text>}
-            </Stack>
-
-            <Stack gap="S">
-              <Text color="TEXT_GREY">メモ</Text>
-              <Text>{company.notes}</Text>
-            </Stack>
-          </Stack>
+            </DefinitionListItem>
+            <DefinitionListItem term="メモ" fullWidth>
+              {company.notes}
+            </DefinitionListItem>
+          </DefinitionList>
         </Base>
       </Stack>
 
