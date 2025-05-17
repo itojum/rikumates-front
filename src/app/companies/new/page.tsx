@@ -36,7 +36,7 @@ export default function NewCompanyPage() {
         </UpwardLink>
       </Stack>
 
-      <Stack gap="M">
+      <Stack>
         <Heading type="screenTitle">新規企業を追加</Heading>
         <Text color="TEXT_GREY">企業情報を入力してください</Text>
 
@@ -45,7 +45,7 @@ export default function NewCompanyPage() {
           defaultValues={{
             name: "",
             industry: "",
-            recruitment_status: "エントリー前",
+            status: "エントリー前",
             website_url: "",
             notes: "",
           }}

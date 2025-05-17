@@ -22,6 +22,7 @@ import { useState } from "react"
 import { useDeleteCompany } from "@/hooks/companies/useDeleteCompany"
 import Link from "next/link"
 import { format } from "date-fns"
+
 export default function CompanyDetailPage() {
   const params = useParams()
   const router = useRouter()
@@ -71,7 +72,7 @@ export default function CompanyDetailPage() {
       </main>
     )
   }
-
+  
   return (
     <main>
       <Stack style={{ marginBottom: "24px" }}>

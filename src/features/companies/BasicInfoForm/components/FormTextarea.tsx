@@ -2,8 +2,17 @@
 
 import { FC } from "react"
 import { Textarea } from "smarthr-ui"
-import { FieldProps } from "../types"
+import { ControllerRenderProps } from "react-hook-form"
+import { BasicInfoFormValues } from "../types"
 
-export const FormTextarea: FC<FieldProps<"notes">> = ({ field }) => (
-  <Textarea {...field} width="100%" rows={4} onChange={(e) => field.onChange(e.target.value)} />
+interface FormTextareaProps {
+  field: ControllerRenderProps<BasicInfoFormValues, "notes">
+}
+
+export const FormTextarea: FC<FormTextareaProps> = ({ field }) => (
+  <Textarea
+    value={field.value}
+    onChange={field.onChange}
+    width="100%"
+  />
 )

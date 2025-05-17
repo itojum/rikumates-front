@@ -3,12 +3,22 @@
 import { FC } from "react"
 import { Input as InputBase } from "smarthr-ui"
 import styled from "styled-components"
-import { FieldProps } from "../types"
+import { ControllerRenderProps } from "react-hook-form"
+import { BasicInfoFormValues } from "../types"
 
 const Input = styled(InputBase)`
   height: 32px;
 `
 
-export const FormInput: FC<FieldProps<"name" | "industry" | "website_url">> = ({ field, width }) => (
-  <Input {...field} width={width} autoComplete="off" onChange={(e) => field.onChange(e.target.value)} />
+interface FormInputProps {
+  field: ControllerRenderProps<BasicInfoFormValues, "name" | "industry" | "website_url">
+  width?: number
+}
+
+export const FormInput: FC<FormInputProps> = ({ field, width }) => (
+  <Input
+    value={field.value}
+    onChange={field.onChange}
+    width={width}
+  />
 )
