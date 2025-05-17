@@ -29,6 +29,7 @@ export default function EditCompanyPage() {
       await putCompany({
         id: id as string,
         ...data,
+        status: data.recruitment_status,
       })
       router.push(backLink)
     } catch {
@@ -75,7 +76,7 @@ export default function EditCompanyPage() {
           defaultValues={{
             name: company.name,
             industry: company.industry || "",
-            status: company.status,
+            recruitment_status: company.status,
             website_url: company.website_url || "",
             notes: company.notes || "",
           }}

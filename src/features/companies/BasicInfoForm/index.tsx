@@ -10,15 +10,16 @@ import { FormInput } from "./components/FormInput"
 import { FormSelect } from "./components/FormSelect"
 import { FormTextarea } from "./components/FormTextarea"
 
-export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues }) => {
+export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit }) => {
   const {
     control,
     formState: { errors },
+    handleSubmit,
   } = useForm<BasicInfoFormValues>({
     defaultValues: {
       name: "",
       industry: "",
-      status: STATUS_OPTIONS[0].value,
+      recruitment_status: STATUS_OPTIONS[0].value,
       website_url: "",
       notes: "",
       ...defaultValues,
@@ -29,7 +30,15 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues }) => {
     <FormSection title="基本情報">
       <form
         id="company-form"
-        onSubmit={() => false}
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit(onSubmit)(e)
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault()
+          }
+        }}
       >
         <Stack gap="S">
           <FormControl
@@ -61,13 +70,13 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues }) => {
           <FormControl
             title="選考状況"
             statusLabels={<RequiredLabel />}
-            errorMessages={errors.status?.message}
+            errorMessages={errors.recruitment_status?.message}
             autoBindErrorInput
           >
             <Controller
-              name="status"
+              name="recruitment_status"
               control={control}
-              rules={VALIDATION_RULES.status}
+              rules={VALIDATION_RULES.recruitment_status}
               render={({ field }) => <FormSelect field={field} />}
             />
           </FormControl>

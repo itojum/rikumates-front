@@ -43,7 +43,7 @@ export default function NewCompanyPage() {
           defaultValues={{
             name: "",
             industry: "",
-            status: "エントリー前",
+            recruitment_status: "エントリー前",
             website_url: "",
             notes: "",
           }}

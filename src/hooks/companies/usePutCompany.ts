@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BasicInfoFormValues } from "@/features/companies/BasicInfoForm/types";
 
-interface PutCompanyParams extends BasicInfoFormValues {
+interface PutCompanyParams
+  extends Omit<BasicInfoFormValues, "recruitment_status"> {
   id: string;
+  status: string;
 }
 
 export const usePutCompany = () => {
