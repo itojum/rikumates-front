@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     }
 
     // データベースへの登録
-    const { data, error } = await supabase.from("companies").insert(insertData)
+    const { data, error } = await supabase.from("companies").insert(insertData).select()
     if (error) {
       throw error
     }

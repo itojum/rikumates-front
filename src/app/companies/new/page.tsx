@@ -4,10 +4,14 @@ import { Heading, Stack, Text, UpwardLink, FloatArea, Button } from "smarthr-ui"
 import { BasicInfoForm } from "@/features/companies/BasicInfoForm"
 import { BasicInfoFormValues } from "@/features/companies/BasicInfoForm/types"
 import Link from "next/link"
+import { usePostCompany } from "@/hooks/companies/usePostCompany"
 
 export default function NewCompanyPage() {
-  const handleSubmit = (data: BasicInfoFormValues) => {
-    console.log("submit data", data)
+  const { postCompany } = usePostCompany()
+
+  const handleSubmit = async (data: BasicInfoFormValues) => {
+    const response = await postCompany(data)
+    console.log(response)
   }
 
   return (
