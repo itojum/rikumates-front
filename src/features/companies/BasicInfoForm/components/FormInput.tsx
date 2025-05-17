@@ -16,5 +16,5 @@ interface FormInputProps {
 }
 
 export const FormInput: FC<FormInputProps> = ({ field, width }) => (
-  <Input value={field.value} onChange={field.onChange} width={width} />
+  <Input autoComplete="off" value={field.value} onChange={field.onChange} width={width} />
 )
