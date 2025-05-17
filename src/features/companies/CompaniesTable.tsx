@@ -15,44 +15,56 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
   const searchParams = useSearchParams()
   const currentQuery = searchParams.toString()
 
-  return (
-    <Table>
-      <thead>
-        <tr>
-          <Th>企業名</Th>
-          <Th>業種</Th>
-          <Th>選考状況</Th>
-          <Th>場所</Th>
-          <Th>作成日</Th>
-          <Th>Webサイト</Th>
-        </tr>
-      </thead>
-      <tbody>
-        {loading && (
+  if (loading) {
+    return (
+      <Table>
+        <THead />
+        <tbody>
           <tr>
             <Td colSpan={7} style={{ textAlign: "center" }}>
               <Loader />
             </Td>
           </tr>
-        )}
-        {error && (
+        </tbody>
+      </Table>
+    )
+  }
+
+  if (error) {
+    return (
+      <Table>
+        <THead />
+        <tbody>
           <tr>
             <Td colSpan={7} style={{ textAlign: "center" }}>
               <Text color="TEXT_RED">エラーが発生しました</Text>
             </Td>
           </tr>
-        )}
-        {companies.length === 0 && !loading && !error && (
+        </tbody>
+      </Table>
+    )
+  }
+
+  if (companies.length === 0) {
+    return (
+      <Table>
+        <THead />
+        <tbody>
           <tr>
             <Td colSpan={7} style={{ textAlign: "center", padding: "30px 0" }}>
-              <Text>企業が見つかりませんでした</Text>
+              <Text size="L">企業が見つかりませんでした</Text>
             </Td>
           </tr>
-        )}
-        {!loading &&
-          !error &&
-          companies.length > 0 &&
-          companies.map((company) => (
+        </tbody>
+      </Table>
+    )
+  }
+
+  return (
+    <Table>
+      <THead />
+      <tbody>
+        {companies.map((company) => (
             <tr key={company.id}>
               <Td>
                 <TextLink href={`/companies/${company.id}?${currentQuery}`} elementAs={Link}>
@@ -79,5 +91,20 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
           ))}
       </tbody>
     </Table>
+  )
+}
+
+const THead = () => {
+  return (
+    <thead>
+      <tr>
+        <Th>企業名</Th>
+        <Th>業種</Th>
+        <Th>選考状況</Th>
+        <Th>場所</Th>
+        <Th>作成日</Th>
+        <Th>Webサイト</Th>
+      </tr>
+    </thead>
   )
 }

@@ -35,6 +35,14 @@ export const CompanyCards: FC<Props> = ({ companies, loading, error }) => {
     return <Text>エラーが発生しました</Text>
   }
 
+  if (companies.length === 0) {
+    return (
+      <Cluster justify="center" style={{ padding: "32px" }}>
+        <Text size="L">企業が見つかりませんでした</Text>
+      </Cluster>
+    )
+  }
+
   return (
     <Cluster justify="center" gap="L">
       {companies.map((company) => (

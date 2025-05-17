@@ -8,15 +8,15 @@ export const SearchForm = () => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const queryClient = useQueryClient()
-  const [query, setQuery] = useState<string>(searchParams.get("query") || "")
+  const [search, setSearch] = useState<string>(searchParams.get("search") || "")
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const params = new URLSearchParams(searchParams.toString())
-    if (query) {
-      params.set("query", query)
+    if (search) {
+      params.set("search", search)
     } else {
-      params.delete("query")
+      params.delete("search")
     }
     params.set("page", "1")
     window.history.pushState(null, "", `${pathname}?${params.toString()}`)
@@ -27,9 +27,9 @@ export const SearchForm = () => {
     <Form onSubmit={handleSubmit}>
       <SearchInput
         tooltipMessage="企業名、業種で検索"
-        value={query}
+        value={search}
         onChange={(e) => {
-          setQuery(e.target.value)
+          setSearch(e.target.value)
         }}
         size={30}
         style={{ height: "100%" }}

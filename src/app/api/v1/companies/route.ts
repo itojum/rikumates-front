@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
   const perPage = Number(searchParams.get("per_page")) || 10;
   const sort = searchParams.get("sort") || "created_at";
   const order = searchParams.get("order") || "desc";
+  const search = searchParams.get("search") || "";
   const recruitmentStatus = searchParams.get("recruitment_status");
   const location = searchParams.get("location");
 
@@ -33,6 +34,10 @@ export async function GET(request: NextRequest) {
 
   if (location) {
     query = query.eq("location", location);
+  }
+
+  if (search) {
+    query = query.or(`name.ilike.%${search}%,industry.ilike.%${search}%`);
   }
 
   query = query.order(sort, { ascending: order === "asc" });
