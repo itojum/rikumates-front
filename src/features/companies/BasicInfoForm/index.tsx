@@ -10,6 +10,8 @@ import { FormSection } from "./components/FormSection"
 import { FormSelect } from "./components/FormSelect"
 import { FormInput } from "./components/FormInput"
 import { FormTextarea } from "./components/FormTextarea"
+import { LOCATION_OPTIONS, STATUS_OPTIONS } from "./constants"
+import { FormCombox } from "./components/FormCombox"
 
 export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit }) => {
   const {
@@ -47,7 +49,11 @@ export const BasicInfoForm: FC<BasicInfoFormProps> = ({ defaultValues, onSubmit 
             </FormControl>
 
             <FormControl title="選考状況" statusLabels={<RequiredLabel />} errorMessages={errors.status?.message}>
-              <Controller name="status" control={control} render={({ field }) => <FormSelect field={field} />} />
+              <Controller name="status" control={control} render={({ field }) => <FormSelect field={field} width={200} options={STATUS_OPTIONS} />} />
+            </FormControl>
+
+            <FormControl title="場所" errorMessages={errors.location?.message}>
+              <Controller name="location" control={control} render={({ field }) => <FormCombox field={field} width={200} options={LOCATION_OPTIONS} />} />
             </FormControl>
 
             <FormControl title="企業URL" errorMessages={errors.website_url?.message}>

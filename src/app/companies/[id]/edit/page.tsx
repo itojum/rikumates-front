@@ -79,6 +79,7 @@ export default function EditCompanyPage() {
             name: company.name,
             industry: company.industry || "",
             status: company.status,
+            location: company.location || "",
             website_url: company.website_url || "",
             notes: company.notes || "",
           }}

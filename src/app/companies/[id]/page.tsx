@@ -106,6 +106,9 @@ export default function CompanyDetailPage() {
             <DefinitionListItem term="選考状況" fullWidth>
               {company.status}
             </DefinitionListItem>
+            <DefinitionListItem term="場所" fullWidth>
+              {company.location}
+            </DefinitionListItem>
 
             <DefinitionListItem term="作成日">{format(new Date(company.created_at), "yyyy/MM/dd")}</DefinitionListItem>
             <DefinitionListItem term="更新日">{format(new Date(company.updated_at), "yyyy/MM/dd")}</DefinitionListItem>

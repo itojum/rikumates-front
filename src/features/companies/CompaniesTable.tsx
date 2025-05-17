@@ -22,6 +22,7 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
           <Th>企業名</Th>
           <Th>業種</Th>
           <Th>選考状況</Th>
+          <Th>場所</Th>
           <Th>作成日</Th>
           <Th>Webサイト</Th>
         </tr>
@@ -61,6 +62,9 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
               <Td>{company.industry}</Td>
               <Td>
                 <StatusLabel>{company.status}</StatusLabel>
+              </Td>
+              <Td>
+                {company.location && <Text>{company.location}</Text>}
               </Td>
               <Td>{format(new Date(company.created_at), "yyyy/MM/dd")}</Td>
               <Td>

@@ -1,3 +1,5 @@
+import { prefectures } from "@/constants/prefectures"
+
 export const STATUS_OPTIONS = [
   { label: "エントリー前", value: "エントリー前" },
   { label: "選考中", value: "選考中" },
@@ -5,3 +7,9 @@ export const STATUS_OPTIONS = [
   { label: "辞退", value: "辞退" },
   { label: "お見送り", value: "お見送り" },
 ]
+
+
+export const LOCATION_OPTIONS = prefectures.map((prefecture) => ({
+  label: prefecture,
+  value: prefecture,
+}))

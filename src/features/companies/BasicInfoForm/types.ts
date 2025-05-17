@@ -19,3 +19,10 @@ export interface FormSectionProps {
   title: string
   children: React.ReactNode
 }
+
+export type LocationOptions = {
+  [key: string]: {
+    label: string
+    value: string
+  }
+}
