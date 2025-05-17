@@ -40,7 +40,7 @@ export const CompaniesTable: FC<Props> = ({ companies, loading, error }) => {
             </Td>
           </tr>
         )}
-        {companies.length === 0 && !loading && (
+        {companies.length === 0 && !loading && !error && (
           <tr>
             <Td colSpan={7} style={{ textAlign: "center", padding: "30px 0" }}>
               <Text>企業が見つかりませんでした</Text>
