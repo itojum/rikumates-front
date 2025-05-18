@@ -47,7 +47,11 @@ export const NewCompany = () => {
 
   return (
     <FormDialog
-      actionButton={<Button variant="primary" prefix={<FaCirclePlusIcon />}>新規企業を追加</Button>}
+      actionButton={
+        <Button variant="primary" prefix={<FaCirclePlusIcon />}>
+          新規企業を追加
+        </Button>
+      }
       title="新規企業"
       actionText="追加"
       actionTheme="primary"
@@ -72,7 +76,8 @@ export const NewCompany = () => {
               required
               errorMessage={errors.industry?.message}
               register={register("industry")}
-              name="industry" />
+              name="industry"
+            />
             <FormSelect
               title="選考状況"
               titleType="blockTitle"

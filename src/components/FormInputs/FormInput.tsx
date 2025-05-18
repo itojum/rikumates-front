@@ -11,19 +11,16 @@ type Props = {
   width?: string | number
 }
 
-export const FormInput = ({title, titleType, required, errorMessage, register, name, width }: Props) => {
+export const FormInput = ({ title, titleType, required, errorMessage, register, name, width }: Props) => {
   return (
-    <FormControl 
-      title={title} 
-      titleType={titleType} 
+    <FormControl
+      title={title}
+      titleType={titleType}
       htmlFor={name}
       errorMessages={errorMessage}
       statusLabels={required ? <RequiredLabel /> : undefined}
-      >
-      <Input 
-        style={{ height: "32px" }} width={width} 
-        autoComplete="off"
-        {...register} />
+    >
+      <Input style={{ height: "32px" }} width={width} autoComplete="off" {...register} />
     </FormControl>
   )
 }

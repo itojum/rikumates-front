@@ -23,7 +23,6 @@ export const FormCombobox = <T extends FieldValues>({
   items,
   width,
 }: Props<T>) => {
-
   return (
     <FormControl
       title={title}

@@ -22,28 +22,16 @@ type Props = {
   width?: string | number
 }
 
-export const FormSelect = ({
-  title, 
-  titleType, 
-  required, 
-  errorMessage, 
-  register, 
-  name, 
-  options, 
-  width }: Props) => {
+export const FormSelect = ({ title, titleType, required, errorMessage, register, name, options, width }: Props) => {
   return (
-    <FormControl 
-      title={title} 
-      titleType={titleType} 
+    <FormControl
+      title={title}
+      titleType={titleType}
       htmlFor={name}
       errorMessages={errorMessage}
       statusLabels={required ? <RequiredLabel /> : undefined}
-      >
-      <Select
-        options={options}
-        style={{ height: "32px" }} width={width} 
-        autoComplete="off"
-        {...register} />
+    >
+      <Select options={options} style={{ height: "32px" }} width={width} autoComplete="off" {...register} />
     </FormControl>
   )
 }
