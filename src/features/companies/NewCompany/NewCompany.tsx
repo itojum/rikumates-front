@@ -8,6 +8,7 @@ import { Button, FaCirclePlusIcon, Stack } from "smarthr-ui"
 import { LOCATION_OPTIONS, STATUS_OPTIONS } from "./constants"
 import { FormTextarea } from "@/components/FormInputs/FormTextarea"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { usePostCompany } from "@/hooks/companies/usePostCompany"
 
 const defaultFormData: CompanyFormValues = {
   name: "",
@@ -31,8 +32,10 @@ export const NewCompany = () => {
     mode: "onChange",
   })
 
+  const { postCompany } = usePostCompany()
+
   const onSubmit = async (data: CompanyFormValues) => {
-    console.log(data)
+    await postCompany(data)
     reset(defaultFormData)
   }
 
