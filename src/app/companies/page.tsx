@@ -1,13 +1,13 @@
 "use client"
 
-import { Base, Button, Center, Cluster, FaCirclePlusIcon, Heading, Pagination, Text } from "smarthr-ui"
+import { Base, Center, Cluster, Heading, Pagination, Text } from "smarthr-ui"
 import { useGetCompanies } from "@/hooks/companies/useGetCompanies"
 import { CompaniesTable } from "@/features/companies/CompaniesTable"
 import { useSearchParams } from "next/navigation"
 import { CompanyCards } from "@/features/companies/CompanyCards"
 import { OperationArea } from "@/features/companies/OperationArea"
 import { Suspense } from "react"
-import Link from "next/link"
+import { NewCompany } from "@/features/companies/NewCompany"
 
 function CompaniesContent() {
   const searchParams = useSearchParams()
@@ -38,11 +38,7 @@ function CompaniesContent() {
           <Text color="TEXT_GREY">就職活動中の企業情報を管理します</Text>
         </div>
 
-        <Link href="/companies/new">
-          <Button prefix={<FaCirclePlusIcon />} variant="primary">
-            新規企業を追加
-          </Button>
-        </Link>
+        <NewCompany />
       </Cluster>
 
       <Base style={{ marginTop: 20 }}>

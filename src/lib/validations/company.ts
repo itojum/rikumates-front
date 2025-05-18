@@ -20,7 +20,6 @@ export const VALIDATION_RULES = {
     required: "選考状況を選択してください",
   },
   location: {
-    required: "場所を選択してください",
     oneOf: {
       value: prefectures,
       message: "リストから選択してください",
@@ -44,7 +43,7 @@ export const companySchema = z.object({
   name: z.string().min(1, VALIDATION_RULES.name.required).max(255, VALIDATION_RULES.name.maxLength.message),
   industry: z.string().min(1, VALIDATION_RULES.industry.required).max(255, VALIDATION_RULES.industry.maxLength.message),
   status: z.string().min(1, VALIDATION_RULES.status.required),
-  location: z.string().min(1, VALIDATION_RULES.location.required),
+  location: z.string().min(1, VALIDATION_RULES.location.oneOf.message),
   website_url: z
     .string()
     .regex(/^https?:\/\/.+/, VALIDATION_RULES.website_url.pattern.message)

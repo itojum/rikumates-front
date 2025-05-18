@@ -1,0 +1,1 @@
+export { FormDialogWithTriggerButton as FormDialog } from "./FormDialogWithTriggerButton"
