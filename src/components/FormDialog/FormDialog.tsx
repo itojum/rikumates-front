@@ -1,3 +1,5 @@
+"use client"
+
 import { ActionDialog, Stack } from "smarthr-ui"
 import { FC } from "react"
 type Props = {

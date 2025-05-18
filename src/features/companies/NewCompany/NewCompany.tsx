@@ -1,3 +1,5 @@
+"use client"
+
 import { FormDialog } from "@/components/FormDialog"
 import { FormInput } from "@/components/FormInputs/FormInput"
 import { FormSelect } from "@/components/FormInputs/FormSelect"
