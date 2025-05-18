@@ -32,15 +32,8 @@ export const NewCompany = () => {
   })
 
   const onSubmit = async (data: CompanyFormValues) => {
-    try {
-      // ここでAPIを呼び出すなどの処理を行う
-      console.log(data)
-      reset(defaultFormData)
-      return true // 成功した場合はtrueを返す
-    } catch (error) {
-      console.error("企業の作成に失敗しました:", error)
-      return false // 失敗した場合はfalseを返す
-    }
+    console.log(data)
+    reset(defaultFormData)
   }
 
   const onClickClose = () => {
@@ -57,7 +50,7 @@ export const NewCompany = () => {
       isValid={isValid}
       onClickClose={onClickClose}
       content={
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <Stack>
             <FormInput
               title="企業名"
